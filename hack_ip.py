@@ -23,6 +23,7 @@ print(colored(f.renderText(f'Hack IP'), 'green'))
 while True :
 
     system_data = platform.uname()
+    os_name = str(system_data.system)
     print(Fore.BLUE + "Tell me your Operating System i.e. Windows,Linux,MacOS")
     print(Fore.CYAN + "[1] Windows")
     print(Fore.CYAN + "[2] Linux")
@@ -35,60 +36,70 @@ while True :
 
     if os_int == 1 :
 
-        print(Fore.YELLOW + "---------------------------Windows-------------------------------")
-        try:
+        if os_name.lower()=="windows" :
 
-            hostname = socket.gethostname() # returns hostname
-            ip_address = socket.gethostbyname(hostname)  # returns IPv4 address with respect to hostname
-            fqdn = socket.getfqdn('www.google.com') # returns fully qualified domain name for name
-            print(Fore.GREEN + 'Operating System : '+str(system_data.system))
-            ip = get('https://api.ipify.org').text
-            
-            print('Machine : '+str(system_data.machine))
-            print('Processor : '+str(system_data.processor))
-            print('Release : '+str(system_data.release))
-            print('Version : '+str(system_data.version))
+            print(Fore.YELLOW + "---------------------------Windows-------------------------------")
+            try:
 
-            print(Fore.GREEN + f'Hostname : {hostname}')
-            print('IP Address :', ip_address)
-            print('FQDN', fqdn)
-            print(socket.gethostbyname_ex(hostname)) # Return a triple (hostname, aliaslist, ipaddrlist)
-            print('Public IP address : {}'.format(ip))
-            print('Private IP Address : ', socket.gethostbyname_ex(hostname)[-1][-1])
-            print(Style.RESET_ALL)
+                hostname = socket.gethostname() # returns hostname
+                ip_address = socket.gethostbyname(hostname)  # returns IPv4 address with respect to hostname
+                fqdn = socket.getfqdn('www.google.com') # returns fully qualified domain name for name
+                print(Fore.GREEN + 'Operating System : '+str(system_data.system))
+                ip = get('https://api.ipify.org').text
+                
+                print('Machine : '+str(system_data.machine))
+                print('Processor : '+str(system_data.processor))
+                print('Release : '+str(system_data.release))
+                print('Version : '+str(system_data.version))
 
-        except :
-            print(Fore.RED + 'error while getting IP address or invalid hostname!')
+                print(Fore.GREEN + f'Hostname : {hostname}')
+                print('IP Address :', ip_address)
+                print('FQDN', fqdn)
+                print(socket.gethostbyname_ex(hostname)) # Return a triple (hostname, aliaslist, ipaddrlist)
+                print('Public IP address : {}'.format(ip))
+                print('Private IP Address : ', socket.gethostbyname_ex(hostname)[-1][-1])
+                print(Style.RESET_ALL)
+
+            except :
+                print(Fore.RED + 'error while getting IP address or invalid hostname!')
+
+        else:
+            print(Fore.RED + "No Windows Installation Detected")
 
     elif os_int == 2 :
+        
+        if os_name.lower() == 'linux':
 
-        print(Fore.YELLOW + "---------------------------Linux---------------------------------")
-        try :
-            
-            hostname = socket.gethostname() # returns hostname
-            fqdn = socket.getfqdn('www.google.com') # returns fully qualified domain name for name
-            ip_address = socket.gethostbyname(hostname)  # returns IPv4 address with respect to hostname
-            os.system('ip addr > out.txt')
-            f = open("out.txt", "r")
-            strings = re.findall(r'192.168.\d{1,3}.\d{1,3}', f.read())
-            ip = get('https://api.ipify.org').text
+            print(Fore.YELLOW + "---------------------------Linux---------------------------------")
+            try :
+                
+                hostname = socket.gethostname() # returns hostname
+                fqdn = socket.getfqdn('www.google.com') # returns fully qualified domain name for name
+                ip_address = socket.gethostbyname(hostname)  # returns IPv4 address with respect to hostname
+                os.system('ip addr > out.txt')
+                f = open("out.txt", "r")
+                strings = re.findall(r'192.168.\d{1,3}.\d{1,3}', f.read())
+                ip = get('https://api.ipify.org').text
 
-            print(Fore.GREEN + 'Operating System : '+str(system_data.system))
-            print('Machine : '+str(system_data.machine))
-            print('Processor : '+str(system_data.processor))
-            print('Release : '+str(system_data.release))
-            print('Version : '+str(system_data.version))
+                print(Fore.GREEN + 'Operating System : '+str(system_data.system))
+                print('Machine : '+str(system_data.machine))
+                print('Processor : '+str(system_data.processor))
+                print('Release : '+str(system_data.release))
+                print('Version : '+str(system_data.version))
 
-            print(f'Hostname : {hostname}')
-            print('IP Address :', ip_address)
-            print('FQDN', fqdn)
-            print(socket.gethostbyname_ex(hostname)) # Return a triple (hostname, aliaslist, ipaddrlist)
-            print('Public IP address : {}'.format(ip))
-            print(f'Private IP Address : {strings[-2]}')
-            print(Style.RESET_ALL)
+                print(f'Hostname : {hostname}')
+                print('IP Address :', ip_address)
+                print('FQDN', fqdn)
+                print(socket.gethostbyname_ex(hostname)) # Return a triple (hostname, aliaslist, ipaddrlist)
+                print('Public IP address : {}'.format(ip))
+                print(f'Private IP Address : {strings[-2]}')
+                print(Style.RESET_ALL)
 
-        except :
-            print(Fore.RED + 'error while getting IP address or invalid hostname!')
+            except :
+                print(Fore.RED + 'error while getting IP address or invalid hostname!')
+        
+        else :
+            print(Fore.RED + "No Linux Installation Detected")
 
     elif os_int == 3 :
 
