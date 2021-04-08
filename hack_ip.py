@@ -70,7 +70,7 @@ while True :
             ip_address = socket.gethostbyname(hostname)  # returns IPv4 address with respect to hostname
             os.system('ip addr > out.txt')
             f = open("out.txt", "r")
-            strings = re.findall(r'\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}', f.read())
+            strings = re.findall(r'192.168.\d{1,3}.\d{1,3}', f.read())
             ip = get('https://api.ipify.org').text
 
             print(Fore.GREEN + 'Operating System : '+str(system_data.system))
