@@ -9,6 +9,6 @@
 3: wlp13s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
     link/ether a8:a7:95:8e:c0:c9 brd ff:ff:ff:ff:ff:ff
     inet 192.168.0.106/24 brd 192.168.0.255 scope global dynamic noprefixroute wlp13s0
-       valid_lft 6205sec preferred_lft 6205sec
+       valid_lft 5634sec preferred_lft 5634sec
     inet6 fe80::c03a:3e7a:59a0:e7db/64 scope link noprefixroute 
        valid_lft forever preferred_lft forever
