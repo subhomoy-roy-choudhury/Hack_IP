@@ -58,19 +58,56 @@ while True :
                 print(socket.gethostbyname_ex(hostname)) # Return a triple (hostname, aliaslist, ipaddrlist)
                 print('Public IP address : {}'.format(ip))
                 print('Private IP Address : ', socket.gethostbyname_ex(hostname)[-1][-1])
-                print(Style.RESET_ALL)
+                
 
             except :
                 print(Fore.RED + 'error while getting IP address or invalid hostname!')
 
         else:
             print(Fore.RED + "No Windows Installation Detected")
-
+        print(Style.RESET_ALL)
+        
     elif os_int == 2 :
         
         if os_name.lower() == 'linux':
 
             print(Fore.YELLOW + "---------------------------Linux---------------------------------")
+            try :
+                
+                hostname = socket.gethostname() # returns hostname
+                fqdn = socket.getfqdn('www.google.com') # returns fully qualified domain name for name
+                ip_address = socket.gethostbyname(hostname)  # returns IPv4 address with respect to hostname
+                os.system('ip addr > out.txt')
+                f = open("out.txt", "r")
+                strings = re.findall(r'192.168.\d{1,3}.\d{1,3}', f.read())
+                ip = get('https://api.ipify.org').text
+
+                print(Fore.GREEN + 'Operating System : '+str(system_data.system))
+                print('Machine : '+str(system_data.machine))
+                print('Processor : '+str(system_data.processor))
+                print('Release : '+str(system_data.release))
+                print('Version : '+str(system_data.version))
+
+                print(f'Hostname : {hostname}')
+                print('IP Address :', ip_address)
+                print('FQDN', fqdn)
+                print(socket.gethostbyname_ex(hostname)) # Return a triple (hostname, aliaslist, ipaddrlist)
+                print('Public IP address : {}'.format(ip))
+                print(f'Private IP Address : {strings[-2]}')
+                
+
+            except :
+                print(Fore.RED + 'error while getting IP address or invalid hostname!')
+        
+        else :
+            print(Fore.RED + "No Linux Installation Detected")
+        print(Style.RESET_ALL)
+
+    elif os_int == 3 :
+
+        if os_name.lower() == 'darwin':
+
+            print(Fore.YELLOW + "---------------------------MacOS---------------------------------")
             try :
                 
                 hostname = socket.gethostname() # returns hostname
@@ -99,11 +136,8 @@ while True :
                 print(Fore.RED + 'error while getting IP address or invalid hostname!')
         
         else :
-            print(Fore.RED + "No Linux Installation Detected")
+            print(Fore.RED + "No MacOS Installation Detected")
 
-    elif os_int == 3 :
-
-        print(Fore.YELLOW + "---------------------------MacOS---------------------------------")
         print(Style.RESET_ALL)
 
     elif os_int == 4 :
