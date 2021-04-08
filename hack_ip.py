@@ -70,7 +70,7 @@ while True :
             ip_address = socket.gethostbyname(hostname)  # returns IPv4 address with respect to hostname
             os.system('ip addr > out.txt')
             f = open("out.txt", "r")
-            strings = re.findall(r'\d{1,3}.\d{1,3}.\d{1,3}.[1]\d{1,2}', f.read())
+            strings = re.findall(r'\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}', f.read())
             ip = get('https://api.ipify.org').text
 
             print(Fore.GREEN + 'Operating System : '+str(system_data.system))
@@ -84,7 +84,7 @@ while True :
             print('FQDN', fqdn)
             print(socket.gethostbyname_ex(hostname)) # Return a triple (hostname, aliaslist, ipaddrlist)
             print('Public IP address : {}'.format(ip))
-            print(f'Public IP Address : {strings[0]}')
+            print(f'Private IP Address : {strings[-2]}')
             print(Style.RESET_ALL)
 
         except :
