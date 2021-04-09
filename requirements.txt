@@ -3,3 +3,4 @@ pyfiglet
 termcolor
 psutil
 requests
+maxminddb-geolite2

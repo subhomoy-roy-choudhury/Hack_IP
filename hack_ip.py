@@ -8,6 +8,7 @@ import platform
 import psutil
 from pyfiglet import Figlet
 from requests import get
+from geolite2 import geolite2
 
 init()
 
@@ -19,6 +20,23 @@ Style: DIM, NORMAL, BRIGHT, RESET_ALL
 f = Figlet(font='banner3-D') # banner3-D , standard , isometric2
 print('\n')
 print(colored(f.renderText(f'Hack IP'), 'green'))
+
+# Location Tracker
+def my_ip_location(my_ip):
+    reader = geolite2.reader()
+    location = reader.get(my_ip)
+
+    #geolite database dict values and fine tunning
+    a=(location['city']['names']['en'])
+    b=(location['continent']['names']['en'])
+    c=(location['country']['names']['en'])
+    d=(location['location'])
+    e=(location['postal'])
+    f=(location['registered_country']['names']['en'])
+    g=(location['subdivisions'][0]['names']['en'])
+
+    print('''city: %s\ncontinent: %s\ncountry: %s\nlocation: %s\npostal: %s\nregistered_country: %s\nsubdivisions: %s\n'''
+     % (a,b,c,d,e,f,g))
 
 while True :
 
@@ -58,7 +76,7 @@ while True :
                 print(socket.gethostbyname_ex(hostname)) # Return a triple (hostname, aliaslist, ipaddrlist)
                 print('Public IP address : {}'.format(ip))
                 print('Private IP Address : ', socket.gethostbyname_ex(hostname)[-1][-1])
-                
+                my_ip_location(ip)
 
             except :
                 print(Fore.RED + 'error while getting IP address or invalid hostname!')
@@ -94,7 +112,7 @@ while True :
                 print(socket.gethostbyname_ex(hostname)) # Return a triple (hostname, aliaslist, ipaddrlist)
                 print('Public IP address : {}'.format(ip))
                 print(f'Private IP Address : {strings[-2]}')
-                
+                my_ip_location(ip)
 
             except :
                 print(Fore.RED + 'error while getting IP address or invalid hostname!')
@@ -130,7 +148,7 @@ while True :
                 print(socket.gethostbyname_ex(hostname)) # Return a triple (hostname, aliaslist, ipaddrlist)
                 print('Public IP address : {}'.format(ip))
                 print(f'Private IP Address : {strings[-2]}')
-                print(Style.RESET_ALL)
+                my_ip_location(ip)
 
             except :
                 print(Fore.RED + 'error while getting IP address or invalid hostname!')
