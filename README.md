@@ -7,3 +7,7 @@
 
 1. pip install -r requirements.txt
 2. python hack_ip.py
+
+# Installation Using pip :-
+1. pip install Hack_IP
+2. write the command hackip in the command line . 
