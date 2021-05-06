@@ -9,5 +9,5 @@
 2. python hack_ip.py
 
 # Installation Using pip :-
-1. pip install Hack_IP
+1. pip install Hack_IP [Link :- https://pypi.org/project/Hack-IP/ ]
 2. write the command hackip in the command line . 
