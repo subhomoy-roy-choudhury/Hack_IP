@@ -1,4 +1,4 @@
-[!screenshot](Hack_IP_mobile_screenshot.jpeg)
+![screenshot](Hack_IP_mobile_screenshot.jpeg)
 
 # Commands List :-
 
