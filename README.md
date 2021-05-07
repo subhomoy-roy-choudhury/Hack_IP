@@ -1,5 +1,5 @@
 # Hack_IP :
-<p>This is a command line tool which is used to gather system info and ipaddress and location of any user . </p>
+<p>This is a command line tool which is used to gather system info and ipaddress and location of any device . </p>
 
 # Requirements :-
 <p>This tool require python3</p>
