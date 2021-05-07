@@ -2,7 +2,7 @@ This is a command line tool which is used to gather system info and location of 
 
 # Commands List :-
 
-In order to run this tool , python versio must be more that 3.8 
+In order to run this tool , python version must be more that 3.8 
 ```
  > pip3 install -r requirements.txt
  > python3 hack_ip.py
