@@ -1,5 +1,3 @@
-![screenshot](Hack_IP_mobile_screenshot.jpeg)
-
 # Commands List :-
 
 1. pip3 install -r requirements.txt
