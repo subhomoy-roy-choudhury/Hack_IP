@@ -1,4 +1,4 @@
-This is a command line tool which is used to gather system info and location of any user . 
+This is a command line tool which is used to gather system info and ipaddress and location of any user . 
 
 # Commands List :-
 
