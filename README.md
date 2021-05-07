@@ -1,17 +1,24 @@
-This is a command line tool which is used to gather system info and ipaddress and location of any user . 
+# Hack_IP :
+<p>This is a command line tool which is used to gather system info and ipaddress and location of any user . </p>
 
-# Commands List :-
+# Requirements :-
+<p>This tool require python3</p>
 
-In order to run this tool , python version must be more that 3.8 
+# Installation :-
+
 ```
+ > git clone https://github.com/subhomoy-roy-choudhury/Hack_IP
+ > cd Hack_IP
  > pip3 install -r requirements.txt
  > python3 hack_ip.py
 ```
 
 # OR
 ```
-> pip install -r requirements.txt
-> python hack_ip.py
+ > git clone https://github.com/subhomoy-roy-choudhury/Hack_IP
+ > cd Hack_IP
+ > pip install -r requirements.txt
+ > python hack_ip.py
 ```
 
 # Installation Using pip :- 
