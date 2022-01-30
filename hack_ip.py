@@ -6,37 +6,54 @@ from colorama import Fore, Back, Style , init
 from termcolor import colored
 import platform
 import psutil
-from pyfiglet import Figlet
-from requests import get
-from geolite2 import geolite2
+# from pyfiglet import Figlet
+import requests
 
 init()
 
-'''
-Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
-Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
-Style: DIM, NORMAL, BRIGHT, RESET_ALL
-'''
-f = Figlet(font='banner3-D') # banner3-D , standard , isometric2
-print('\n')
-print(colored(f.renderText(f'Hack IP'), 'green'))
+# '''
+# Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
+# Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
+# Style: DIM, NORMAL, BRIGHT, RESET_ALL
+# '''
+# f = Figlet(font='banner3-D') # banner3-D , standard , isometric2
+# print('\n')
+# print(colored(f.renderText(f'Hack IP'), 'green'))
+
+print(Fore.GREEN +'''
+'##::::'##::::'###:::::'######::'##:::'##::::'####:'########::
+ ##:::: ##:::'## ##:::'##... ##: ##::'##:::::. ##:: ##.... ##:
+ ##:::: ##::'##:. ##:: ##:::..:: ##:'##::::::: ##:: ##:::: ##:
+ #########:'##:::. ##: ##::::::: #####:::::::: ##:: ########::
+ ##.... ##: #########: ##::::::: ##. ##::::::: ##:: ##.....:::
+ ##:::: ##: ##.... ##: ##::: ##: ##:. ##:::::: ##:: ##::::::::
+ ##:::: ##: ##:::: ##:. ######:: ##::. ##::::'####: ##::::::::
+..:::::..::..:::::..:::......:::..::::..:::::....::..:::::::::
+''')
 
 # Location Tracker
-def my_ip_location(my_ip):
-    reader = geolite2.reader()
-    location = reader.get(my_ip)
+def my_ip_location():
+    response = requests.get('https://ipinfo.io')
+    response = response.json()
 
     #geolite database dict values and fine tunning
-    a=(location['city']['names']['en'])
-    b=(location['continent']['names']['en'])
-    c=(location['country']['names']['en'])
-    d=(location['location'])
-    e=(location['postal'])
-    f=(location['registered_country']['names']['en'])
-    g=(location['subdivisions'][0]['names']['en'])
-
-    print('''city: %s\ncontinent: %s\ncountry: %s\nlocation: %s\npostal: %s\nregistered_country: %s\nsubdivisions: %s\n'''
-     % (a,b,c,d,e,f,g))
+    ip= response['ip']
+    city=response['city']
+    region = response['region']
+    country=response['country']
+    location = response['loc']
+    network_provider=response['org']
+    postal_code=response['postal']
+    timezone=response['timezone']
+    
+    print('Public IP address : {}'.format(ip))
+    print("City :-",city)
+    print("Region :-",region)
+    print("Country :-",country)
+    print("Location :-",location)
+    print("Network Provider :-",network_provider)
+    print("Postal Code :-",postal_code)
+    print("Timezone :-",timezone)
 
 while True :
 
@@ -63,7 +80,6 @@ while True :
                 ip_address = socket.gethostbyname(hostname)  # returns IPv4 address with respect to hostname
                 fqdn = socket.getfqdn('www.google.com') # returns fully qualified domain name for name
                 print(Fore.GREEN + 'Operating System : '+str(system_data.system))
-                ip = get('https://api.ipify.org').text
                 
                 print('Machine : '+str(system_data.machine))
                 print('Processor : '+str(system_data.processor))
@@ -74,11 +90,11 @@ while True :
                 print('IP Address :', ip_address)
                 print('FQDN', fqdn)
                 print(socket.gethostbyname_ex(hostname)) # Return a triple (hostname, aliaslist, ipaddrlist)
-                print('Public IP address : {}'.format(ip))
-                my_ip_location(ip)
+                my_ip_location()
                 print('Private IP Address : ', socket.gethostbyname_ex(hostname)[-1][-1])
                 
-            except :
+            except Exception as e:
+                print(e)
                 print(Fore.RED + 'error while getting IP address or invalid hostname!')
 
         else:
@@ -98,7 +114,6 @@ while True :
                 os.system('ip addr > out.txt')
                 f = open("out.txt", "r")
                 strings = re.findall(r'192.168.\d{1,3}.\d{1,3}', f.read())
-                ip = get('https://api.ipify.org').text
 
                 print(Fore.GREEN + 'Operating System : '+str(system_data.system))
                 print('Machine : '+str(system_data.machine))
@@ -110,11 +125,11 @@ while True :
                 print('IP Address :', ip_address)
                 print('FQDN', fqdn)
                 print(socket.gethostbyname_ex(hostname)) # Return a triple (hostname, aliaslist, ipaddrlist)
-                print('Public IP address : {}'.format(ip))
-                my_ip_location(ip)
+                my_ip_location()
                 print(f'Private IP Address : {strings[-2]}')
 
-            except :
+            except Exception as e:
+                print(e)
                 print(Fore.RED + 'error while getting IP address or invalid hostname!')
         
         else :
@@ -134,7 +149,6 @@ while True :
                 os.system('ip addr > out.txt')
                 f = open("out.txt", "r")
                 strings = re.findall(r'192.168.\d{1,3}.\d{1,3}', f.read())
-                ip = get('https://api.ipify.org').text
 
                 print(Fore.GREEN + 'Operating System : '+str(system_data.system))
                 print('Machine : '+str(system_data.machine))
@@ -146,11 +160,11 @@ while True :
                 print('IP Address :', ip_address)
                 print('FQDN', fqdn)
                 print(socket.gethostbyname_ex(hostname)) # Return a triple (hostname, aliaslist, ipaddrlist)
-                print('Public IP address : {}'.format(ip))
-                my_ip_location(ip)
+                my_ip_location()
                 print(f'Private IP Address : {strings[-2]}')
 
-            except :
+            except Exception as e:
+                print(e)
                 print(Fore.RED + 'error while getting IP address or invalid hostname!')
         
         else :
