@@ -31,6 +31,9 @@ You can also install this using pip
 # Screenshot :-
 ![scrrenshot](Hack_IP_mobile_screenshot.jpeg)
 
+# Reference :-
+`https://www.thepythoncode.com/article/get-hardware-system-information-python`
+
 # LICENSE :-
 
 Copyright (c) 2018 The Python Packaging Authority

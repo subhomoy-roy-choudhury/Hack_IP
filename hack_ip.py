@@ -5,7 +5,7 @@ import re
 from colorama import Fore, Back, Style , init
 import platform
 # from pyfiglet import Figlet
-from helpers import HackIPHelper
+from utils import HackIPUtility
 
 class HackTP(object):
     def __init__(self) -> None:
@@ -23,7 +23,7 @@ class HackTP(object):
 
         self.run()
     
-    def _windows(self,system_data,result_dict):
+    def _windows(self,system_data):
         print(Fore.YELLOW + "---------------------------Windows-------------------------------")
         try:
 
@@ -31,7 +31,7 @@ class HackTP(object):
             ip_address = socket.gethostbyname(hostname)  # returns IPv4 address with respect to hostname
             fqdn = socket.getfqdn('www.google.com') # returns fully qualified domain name for name
             private_ip_addr = socket.gethostbyname_ex(hostname)[-1][-1]
-            result_dict = HackIPHelper.output(result_dict,system_data,hostname,ip_address,fqdn,private_ip_addr)
+            result_dict = HackIPUtility.output(system_data,hostname,ip_address,fqdn,private_ip_addr)
 
             
         except Exception as e:
@@ -51,7 +51,7 @@ class HackTP(object):
             f = open("out.txt", "r")
             strings = re.findall(r'192.168.\d{1,3}.\d{1,3}', f.read())
             private_ip_addr = strings[-2]
-            result_dict = HackIPHelper.output(result_dict,system_data,hostname,ip_address,fqdn,private_ip_addr)
+            result_dict = HackIPUtility.output(result_dict,system_data,hostname,ip_address,fqdn,private_ip_addr)
 
         except Exception as e:
             print(e)
@@ -69,7 +69,7 @@ class HackTP(object):
             f = open("out.txt", "r")
             strings = re.findall(r'192.168.\d{1,3}.\d{1,3}', f.read())
             private_ip_addr = strings[-2]
-            result_dict = HackIPHelper.output(result_dict,system_data,hostname,ip_address,fqdn,private_ip_addr)
+            result_dict = HackIPUtility.output(result_dict,system_data,hostname,ip_address,fqdn,private_ip_addr)
             
 
         except Exception as e:
@@ -84,17 +84,15 @@ class HackTP(object):
 
             system_data = platform.uname()
             os_name = str(system_data.system)
-        
-            result_dict = dict()
 
             if os_name.lower()=="windows" :
-                self._windows(system_data,result_dict)
+                self._windows(system_data)
                 
             elif os_name.lower() == 'linux':
-                self._linux(system_data,result_dict)
+                self._linux(system_data)
 
             elif os_name.lower() == 'darwin':
-                self._macos(system_data,result_dict)
+                self._macos(system_data)
 
             print(Fore.YELLOW + "-----------------------------------------------------------------")
 
