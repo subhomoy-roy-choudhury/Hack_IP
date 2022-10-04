@@ -29,7 +29,7 @@ You can also install this using pip
  > hackip
 ```
 # Screenshot :-
-![scrrenshot](Hack_IP_mobile_screenshot.jpeg)
+![scrrenshot](images/Hack_IP_mobile_screenshot.jpeg)
 
 # Reference :-
 `https://www.thepythoncode.com/article/get-hardware-system-information-python`

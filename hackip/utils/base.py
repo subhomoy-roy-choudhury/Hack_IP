@@ -1,10 +1,9 @@
 import requests
-import socket
-from colorama import Fore, Back, Style , init
 from urllib.parse import quote
 import psutil
 from datetime import datetime
-from helpers import get_size, encoding_result, get_shortened_url
+from ..helpers import get_size, encoding_result, get_shortened_url
+from rich import print as rprint
 
 class HackIPUtility(object):
     # Location Tracker
@@ -101,31 +100,35 @@ class HackIPUtility(object):
     
     @staticmethod
     def get_cpu_information(dictionary=dict()):
-        # let's print CPU information
-        print("="*40, "CPU Info", "="*40)
-        # number of cores
-        print("Physical cores:", psutil.cpu_count(logical=False))
-        dictionary['physical-cores'] = psutil.cpu_count(logical=False)
-        print("Total cores:", psutil.cpu_count(logical=True))
-        dictionary['total-cores'] = psutil.cpu_count(logical=True)
-        # CPU frequencies
-        cpufreq = psutil.cpu_freq()
-        print(f"Max Frequency: {cpufreq.max:.2f}Mhz")
-        dictionary['maximum-frequency'] = f"{cpufreq.max:.2f}Mhz"
-        print(f"Min Frequency: {cpufreq.min:.2f}Mhz")
-        dictionary['minimum-frequency'] = f"{cpufreq.min:.2f}Mhz"
-        print(f"Current Frequency: {cpufreq.current:.2f}Mhz")
-        dictionary['current-frequency'] = f"{cpufreq.current:.2f}Mhz"
-        # CPU usage
-        print("CPU Usage Per Core:")
-        for i, percentage in enumerate(psutil.cpu_percent(percpu=True, interval=1)):
-            print(f"Core {i}: {percentage}%")
-            dictionary[f'core-{i}'] = f"{percentage}%"
-        total_cpu_usage = psutil.cpu_percent()
-        dictionary['total-cpu-usage'] = f"{total_cpu_usage}%"
-        print(f"Total CPU Usage: {total_cpu_usage}%")
-
-        return dictionary
+        try :
+            # let's print CPU information
+            print("="*40, "CPU Info", "="*40)
+            # number of cores
+            print("Physical cores:", psutil.cpu_count(logical=False))
+            dictionary['physical-cores'] = psutil.cpu_count(logical=False)
+            print("Total cores:", psutil.cpu_count(logical=True))
+            dictionary['total-cores'] = psutil.cpu_count(logical=True)
+            # CPU frequencies
+            cpufreq = psutil.cpu_freq()
+            print(f"Max Frequency: {cpufreq.max:.2f}Mhz")
+            dictionary['maximum-frequency'] = f"{cpufreq.max:.2f}Mhz"
+            print(f"Min Frequency: {cpufreq.min:.2f}Mhz")
+            dictionary['minimum-frequency'] = f"{cpufreq.min:.2f}Mhz"
+            print(f"Current Frequency: {cpufreq.current:.2f}Mhz")
+            dictionary['current-frequency'] = f"{cpufreq.current:.2f}Mhz"
+            # CPU usage
+            print("CPU Usage Per Core:")
+            for i, percentage in enumerate(psutil.cpu_percent(percpu=True, interval=1)):
+                print(f"Core {i}: {percentage}%")
+                dictionary[f'core-{i}'] = f"{percentage}%"
+            total_cpu_usage = psutil.cpu_percent()
+            dictionary['total-cpu-usage'] = f"{total_cpu_usage}%"
+            print(f"Total CPU Usage: {total_cpu_usage}%")
+        
+        except Exception as e:
+            print(e)
+        finally :
+            return dictionary
 
     @staticmethod
     def get_memory_information(dictionary=dict()):

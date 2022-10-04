@@ -1,3 +1,12 @@
 out.txt
 test.py
 __pycache__/
+
+venv
+
+build/*
+dist
+
+*.egg-info
+
+.vscode

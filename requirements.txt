@@ -1,6 +1,5 @@
-colorama
-pyfiglet
 termcolor
 psutil
 requests
-# maxminddb-geolite2
+maxminddb-geolite2
+rich
