@@ -27,7 +27,7 @@ setuptools.setup(
     packages=['hackip','hackip.utils','hackip.helpers'],
     # package_dir = {"": "hackip"},
     include_package_data=True,
-    install_requires=['colorama','pyfiglet','termcolor','psutil','requests','maxminddb-geolite2'],
+    install_requires=['psutil','requests','maxminddb-geolite2'],
     entry_points={
         "console_scripts": [
             "hackip=hackip:run",
