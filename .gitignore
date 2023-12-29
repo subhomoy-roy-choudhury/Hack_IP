@@ -10,3 +10,5 @@ dist
 *.egg-info
 
 .vscode
+
+*.log
