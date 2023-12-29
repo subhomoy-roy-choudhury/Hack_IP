@@ -1,5 +1,8 @@
 import base64
 import requests
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_shortened_url(url):
 
@@ -13,9 +16,9 @@ def get_shortened_url(url):
     if data["status"] == 7:
         # OK, get shortened URL
         shortened_url = data["shortLink"]
-        print("Shortened URL:", shortened_url)
+        logger.info(f"Shortened URL: {shortened_url}")
     else:
-        print("[!] Error Shortening URL:", data)
+        logger.critical(f"[!] Error Shortening URL: {data}")
     
     return shortened_url
 
