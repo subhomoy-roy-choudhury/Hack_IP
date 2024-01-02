@@ -16,6 +16,10 @@ psutil = "^5.9.0"
 maxminddb-geolite2 = "^2018.703"
 art = "^6.1"
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.4"
+flake8 = "^6.1.0"
+tox = "^4.11.4"
 
 [build-system]
 requires = ["poetry-core"]
