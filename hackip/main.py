@@ -1,13 +1,13 @@
 import platform
 
-from operating_system.linux import LinuxUtils
-from operating_system.windows import WindowsUtils
-from operating_system.macos import MacOSUtils
+from hackip.operating_system.linux import LinuxUtils
+from hackip.operating_system.windows import WindowsUtils
+from hackip.operating_system.macos import MacOSUtils
 from rich import print as rprint
 from art import text2art
 from rich.console import Console
 
-from logger_config import setup_logging
+from hackip.logger_config import setup_logging
 
 # Setup logging
 setup_logging()
@@ -48,6 +48,8 @@ class HackIP(object):
         os_object = self.get_os_utility()
         os_object.stdout()
 
+def execute():
+    HackIP().start()
 
 if __name__ == "__main__":
-    HackIP().start()
+    execute()

@@ -6,7 +6,7 @@ import requests
 from urllib.parse import quote
 from datetime import datetime
 from rich import print as rprint
-from helpers import get_size, slug_to_title, encoding_result, get_shortened_url
+from hackip.helpers import get_size, slug_to_title, encoding_result, get_shortened_url
 
 logger = logging.getLogger(__name__)
 

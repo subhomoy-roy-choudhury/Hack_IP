@@ -1,7 +1,8 @@
 import os
 import re
+from hackip.operating_system.base import BaseOperatingSystemUtils
 
-class LinuxUtils(object):
+class LinuxUtils(BaseOperatingSystemUtils):
     def __init__(self) -> None:
         super().__init__()
         self.os_name = "Linux Operating System"
