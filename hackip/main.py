@@ -1,6 +1,5 @@
 import platform
 
-# from operating_system.base import HackIPUtility
 from operating_system.linux import LinuxUtils
 from operating_system.windows import WindowsUtils
 from operating_system.macos import MacOSUtils
@@ -16,11 +15,11 @@ setup_logging()
 
 class HackIP(object):
     def __init__(self) -> None:
-        pass
+        self.banner_text = "HackIP"
 
     def introduction(self):
         # Generate ASCII art text
-        ascii_art = text2art("HackIP")
+        ascii_art = text2art(self.banner_text)
 
         # Print using rich for colored output
         rprint(f"[green]{ascii_art}")
