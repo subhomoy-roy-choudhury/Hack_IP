@@ -2,7 +2,7 @@ import os, re
 import socket
 import psutil
 from rich import print as rprint
-from operating_system.base import BaseOperatingSystemUtils
+from hackip.operating_system.base import BaseOperatingSystemUtils
 
 
 class MacOSUtils(BaseOperatingSystemUtils):
