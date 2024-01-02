@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/subhomoy-roy-choudhury/hack-ip"
 keywords = ["IP", "system-info", "networking"]
-packages = [{include = "hackip"}]
+packages = [{ include = "hackip" }]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -26,6 +26,5 @@ wheel = "^0.42.0"
 twine = "^4.0.2"
 
 [build-system]
-requires = ["setuptools>=40.6.0", "wheel"]
-build-backend = "setuptools.build_meta"
-
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
