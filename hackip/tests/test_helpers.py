@@ -95,7 +95,7 @@ def test_handling_invalid_url(mock_get):
 
 
 def test_with_standard_slug():
-    assert slug_to_title("this-is-a-test-slug") == "This Is A Test Slug"
+    assert slug_to_title("this_is_a_test_slug", seperator="_") == "This Is A Test Slug"
 
 
 def test_with_empty_slug():
@@ -103,7 +103,7 @@ def test_with_empty_slug():
 
 
 def test_with_uppercase_letters():
-    assert slug_to_title("This-Is-A-Test") == "This Is A Test"
+    assert slug_to_title("This_Is_A_Test") == "This Is A Test"
 
 
 def test_with_single_word_slug():
@@ -111,8 +111,8 @@ def test_with_single_word_slug():
 
 
 def test_with_numbers_and_special_characters():
-    assert slug_to_title("test-slug-123-!@#") == "Test Slug 123 !@#"
+    assert slug_to_title("test_slug_123_!@#") == "Test Slug 123 !@#"
 
 
 def test_with_leading_and_trailing_hyphens():
-    assert slug_to_title("-leading-trailing-") == " Leading Trailing "
+    assert slug_to_title("_leading_trailing_") == " Leading Trailing "
