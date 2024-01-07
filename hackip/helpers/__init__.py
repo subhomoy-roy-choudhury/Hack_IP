@@ -1,3 +1,5 @@
+import os
+import json
 import base64
 import requests
 import logging
@@ -47,7 +49,23 @@ def encoding_result(dictionary):
     return base64_dict
 
 
-def slug_to_title(slug):
-    words = slug.split("-")  # Split the slug by hyphens
+def slug_to_title(slug, seperator = "_"):
+    words = slug.split(seperator)  # Split the slug by hyphens
     title_cased_words = [word.capitalize() for word in words]  # Capitalize each word
     return " ".join(title_cased_words)  # Join the words with spaces
+
+def write_json(filename, data):
+    # Writing JSON data
+    with open(filename, 'w') as file:
+        json.dump(data, file, indent=4)
+
+# Function to get symbol for test case status
+def get_status_symbol(status):
+    if status == "pass":
+        return "[green]:heavy_check_mark:"  # Green tick
+    elif status == "fail":
+        return "[red]:x:"  # Red cross
+    
+def create_folder(foldername):
+    if not os.path.exists(foldername):
+        os.makedirs(foldername)

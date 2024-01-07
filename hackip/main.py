@@ -5,9 +5,10 @@ from hackip.operating_system.windows import WindowsUtils
 from hackip.operating_system.macos import MacOSUtils
 from rich import print as rprint
 from art import text2art
-from rich.console import Console
 
 from hackip.logger_config import setup_logging
+from hackip.helpers import create_folder
+from hackip.constants import GENERATED_REPORT_FOLDER_NAME
 
 # Setup logging
 setup_logging()
@@ -42,7 +43,10 @@ class HackIP(object):
 
     def start(self, *args, **kwargs):
         # Introduction
-        self.introduction()
+        # self.introduction()
+
+        # Create Reports Folder
+        create_folder(GENERATED_REPORT_FOLDER_NAME)
 
         # System Information
         os_object = self.get_os_utility()

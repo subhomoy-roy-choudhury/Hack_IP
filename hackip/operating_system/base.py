@@ -1,3 +1,4 @@
+import os
 import platform
 import psutil
 import socket
@@ -5,10 +6,24 @@ import logging
 import requests
 from urllib.parse import quote
 from datetime import datetime
-from rich import print as rprint
-from hackip.helpers import get_size, slug_to_title, encoding_result, get_shortened_url
+
+from rich.console import Console
+from rich.status import Status
+from rich.panel import Panel
+
+from hackip.helpers import (
+    get_size,
+    encoding_result,
+    get_shortened_url,
+    write_json,
+    slug_to_title,
+)
+from hackip.operating_system.enum import InformationParameter
+from hackip.operating_system.decorators import fetch_info_wrapper
+from hackip.constants import BASE_WEB_URL, GENERATED_REPORT_FOLDER_NAME
 
 logger = logging.getLogger(__name__)
+console = Console()
 
 
 class BaseOperatingSystemUtils(object):
@@ -18,6 +33,9 @@ class BaseOperatingSystemUtils(object):
         self.hostname = socket.gethostname()  # returns hostname
         self.private_ip_addr = None
 
+    @fetch_info_wrapper(
+        fetch_info_name=slug_to_title(InformationParameter.SYSTEM.value)
+    )
     def _format_system_info(self):
         return {
             "system": self.system_data.system,
@@ -26,7 +44,9 @@ class BaseOperatingSystemUtils(object):
             "version": self.system_data.version,
             "machine": self.system_data.machine,
             "processor": self.system_data.processor,
-            "fqdn": socket.getfqdn("www.google.com"),  # returns fully qualified domain name for name
+            "fqdn": socket.getfqdn(
+                "www.google.com"
+            ),  # returns fully qualified domain name for name
             "private-ip-address": self._get_private_ip_address(),
         }
 
@@ -67,6 +87,7 @@ class BaseOperatingSystemUtils(object):
             logger.error(f"Error Fetching CPU Usage per core data: {e}")
         return result
 
+    @fetch_info_wrapper(fetch_info_name=slug_to_title(InformationParameter.CPU.value))
     def _format_cpu_information(self):
         return {
             **self._get_cpu_cores(),
@@ -98,6 +119,9 @@ class BaseOperatingSystemUtils(object):
             logger.error("Error Fetching Swap Memory Information")
         return result
 
+    @fetch_info_wrapper(
+        fetch_info_name=slug_to_title(InformationParameter.MEMORY.value)
+    )
     def _format_memory_information(self):
         return {
             **self._get_virtual_memory_information(),
@@ -135,6 +159,7 @@ class BaseOperatingSystemUtils(object):
             logger.error("Error fetching all disk partitions data")
         return result
 
+    @fetch_info_wrapper(fetch_info_name=slug_to_title(InformationParameter.DISK.value))
     def _format_disk_information(self):
         try:
             # get IO statistics since boot
@@ -146,7 +171,6 @@ class BaseOperatingSystemUtils(object):
             }
         except Exception as e:
             logger.error("Error fetching disk information")
-
 
     def _get_all_network_interfaces(self):
         result = {}
@@ -175,10 +199,13 @@ class BaseOperatingSystemUtils(object):
         except Exception as e:
             logger.error("Error fetching all network interface data: %s", str(e))
         return result
-    
+
     def _get_private_ip_address(self):
         raise Exception("Not Implemented")
 
+    @fetch_info_wrapper(
+        fetch_info_name=slug_to_title(InformationParameter.NETWORK.value)
+    )
     def _format_network_information(self):
         try:
             # get IO statistics since boot
@@ -195,8 +222,11 @@ class BaseOperatingSystemUtils(object):
         response = requests.get("https://ipinfo.io")
         response = response.json()
         return response
-    
-    def _format_public_ip_information(self):
+
+    @fetch_info_wrapper(
+        fetch_info_name=slug_to_title(InformationParameter.PUBLIC_IP.value)
+    )
+    def _format_public_ip_details(self):
         public_ip_info = self._get_public_ip_information()
         return {
             "public-ip-address": public_ip_info["ip"],
@@ -211,45 +241,51 @@ class BaseOperatingSystemUtils(object):
 
     def prepare(self):
         result = {}
-        result["system-information"] = {
-            **self._format_system_info(),
-            "Boot Time": self._format_boot_time(),
-        }
-        result["cpu-information"] = self._format_cpu_information()
-        result["memory-information"] = self._format_memory_information()
-        result["disk-information"] = self._format_disk_information()
-        result["network-information"] = self._format_network_information()
-        result["public-ip-address-information"] = self._format_public_ip_information()
-        return result
-    
+        with Status("[bold green]Fetching Informstion...", spinner="dots") as status:
+            result[InformationParameter.SYSTEM.value] = {
+                **self._format_system_info(),
+                "boot_time": self._format_boot_time(),
+            }
+            result[InformationParameter.CPU.value] = self._format_cpu_information()
+            result[
+                InformationParameter.MEMORY.value
+            ] = self._format_memory_information()
+            result[InformationParameter.DISK.value] = self._format_disk_information()
+            result[
+                InformationParameter.NETWORK.value
+            ] = self._format_network_information()
+            result[
+                InformationParameter.PUBLIC_IP.value
+            ] = self._format_public_ip_details()
+            return result
+
     def _create_webpage_link(self, data):
         encoded_str = encoding_result(data)
-        result_link = f"http://127.0.0.1:3000/?encoded_string={quote(encoded_str.decode())}"
+        result_link = f"{BASE_WEB_URL}/?encoded_string={quote(encoded_str.decode())}"
         result_link = get_shortened_url(result_link)
         return result_link
 
-    def _output(self, data):
+    def _generate_report(self, data):
         try:
-            for header, metadata in data.items():
-                rprint("=" * 40, slug_to_title(header), "=" * 40)
-                for parameter, data in metadata.items():
-                    if isinstance(data, dict):
-                        rprint(f"=== {parameter} ===")
-                        for key, value in data.items():
-                            rprint(f"{slug_to_title(key)}: {value}")
-                    else:
-                        rprint(f"{slug_to_title(parameter)}: {data}")
-            rprint("=" * 80)
-            webpage_link = self._create_webpage_link(data)
-            rprint(f"Link :- [green]{webpage_link}")
+            write_json(
+                os.path.join(GENERATED_REPORT_FOLDER_NAME, "overall-report.json"), data
+            )
+            console.print(
+                "\n[+] Successfully generated system report", style="bold bright_blue"
+            )
         except Exception as e:
-            raise ValueError("Output Formatting Error")
+            raise ValueError("Error Generating Report")
 
     def stdout(self):
-        rprint(
-            f"[yellow]--------------------------- {self.os_name} ---------------------------------"
+        # Section divider with Title
+        console.print(
+            Panel(
+                "System Report",
+                expand=False,
+                style="bright_yellow",
+                border_style="bold",
+            )
         )
-        data = self.prepare()
-        self._output(data)
 
-        rprint("[yellow]" + "-" * 40)
+        data = self.prepare()
+        self._generate_report(data)
