@@ -13,3 +13,4 @@ dist
 *.log
 
 report/*
+config.ini

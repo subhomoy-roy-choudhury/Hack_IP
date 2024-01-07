@@ -17,6 +17,7 @@ setuptools = "^58.5.3"
 psutil = "^5.9.0"
 maxminddb-geolite2 = "^2018.703"
 art = "^6.1"
+openai = "^1.6.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.4"

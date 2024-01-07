@@ -59,6 +59,12 @@ def write_json(filename, data):
     with open(filename, 'w') as file:
         json.dump(data, file, indent=4)
 
+def read_json(filename):
+    # Reading the JSON data
+    with open(filename, 'r') as file:
+        data = json.load(file)
+    return data
+
 # Function to get symbol for test case status
 def get_status_symbol(status):
     if status == "pass":
