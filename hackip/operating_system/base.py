@@ -6,6 +6,7 @@ import logging
 import requests
 from urllib.parse import quote
 from datetime import datetime
+from collections import defaultdict
 
 from rich.console import Console
 from rich.status import Status
@@ -32,6 +33,13 @@ class BaseOperatingSystemUtils(object):
         self.system_data = platform.uname()
         self.hostname = socket.gethostname()  # returns hostname
         self.private_ip_addr = None
+
+    def _fetch_data_safely(self, fetch_function, error_message):
+        try:
+            return fetch_function()
+        except Exception as e:
+            logger.error(f"{error_message}: {e}")
+            return {}
 
     @fetch_info_wrapper(
         fetch_info_name=slug_to_title(InformationParameter.SYSTEM.value)
@@ -90,9 +98,15 @@ class BaseOperatingSystemUtils(object):
     @fetch_info_wrapper(fetch_info_name=slug_to_title(InformationParameter.CPU.value))
     def _format_cpu_information(self):
         return {
-            **self._get_cpu_cores(),
-            **self._get_cpu_freq(),
-            **self._get_cpu_usage_per_core(),
+            **self._fetch_data_safely(
+                self._get_cpu_cores, "Error Fetching CPU cores data"
+            ),
+            **self._fetch_data_safely(
+                self._get_cpu_freq, "Error Fetching CPU frequency data"
+            ),
+            **self._fetch_data_safely(
+                self._get_cpu_usage_per_core, "Error Fetching CPU Usage per core data"
+            ),
         }
 
     def _get_virtual_memory_information(self):
@@ -130,34 +144,31 @@ class BaseOperatingSystemUtils(object):
 
     def _get_all_disk_partitions(self):
         result = {}
-        try:
-            partitions = psutil.disk_partitions()
-            for partition in partitions:
-                result[partition.device] = {
-                    "mountpoint": partition.mountpoint,
-                    "file-system-type": partition.fstype,
-                }
-                try:
-                    partition_usage = psutil.disk_usage(partition.mountpoint)
-                    result[partition.device]["total-size"] = get_size(
-                        partition_usage.total
-                    )
-                    result[partition.device]["used-size"] = get_size(
-                        partition_usage.used
-                    )
-                    result[partition.device]["free-size"] = get_size(
-                        partition_usage.free
-                    )
-                    result[partition.device][
-                        "percentage"
-                    ] = f"{partition_usage.percent}%"
-                except PermissionError as e:
-                    logger.warning(
-                        f"Insuffiecient Permission to access the file system {partition.device}"
-                    )
-        except Exception as e:
-            logger.error("Error fetching all disk partitions data")
+        partitions = self._fetch_data_safely(
+            psutil.disk_partitions, "Error fetching all disk partitions data"
+        )
+        for partition in partitions:
+            partition_info = self._get_partition_info(partition)
+            if partition_info:
+                result[partition.device] = partition_info
         return result
+
+    def _get_partition_info(self, partition):
+        try:
+            partition_usage = psutil.disk_usage(partition.mountpoint)
+            return {
+                "mountpoint": partition.mountpoint,
+                "file-system-type": partition.fstype,
+                "total-size": get_size(partition_usage.total),
+                "used-size": get_size(partition_usage.used),
+                "free-size": get_size(partition_usage.free),
+                "percentage": f"{partition_usage.percent}%",
+            }
+        except PermissionError as e:
+            logger.warning(
+                f"Insuffiecient Permission to access the file system {partition.device}"
+            )
+            return None
 
     @fetch_info_wrapper(fetch_info_name=slug_to_title(InformationParameter.DISK.value))
     def _format_disk_information(self):
@@ -173,32 +184,27 @@ class BaseOperatingSystemUtils(object):
             logger.error("Error fetching disk information")
 
     def _get_all_network_interfaces(self):
-        result = {}
+        result = defaultdict(dict)
         try:
             if_addrs = psutil.net_if_addrs()
             for interface_name, interface_addresses in if_addrs.items():
-                if interface_name not in result:
-                    result[interface_name] = {}
                 for address in interface_addresses:
                     if address.family == socket.AF_INET:
-                        result[interface_name].update(
-                            {
-                                "ip-address": address.address,
-                                "netmask": address.netmask,
-                                "broadcast-ip": address.broadcast,
-                            }
-                        )
+                        address_key = "inet"
                     elif address.family == socket.AF_PACKET:
-                        result[interface_name].update(
-                            {
-                                "mac-address": address.address,
-                                "netmask": address.netmask,
-                                "broadcast-mac": address.broadcast,
-                            }
-                        )
+                        address_key = "packet"
+                    else:
+                        continue  # Skip if the address family is not of interest
+
+                    result[interface_name][f"{address_key}-address"] = address.address
+                    result[interface_name][f"{address_key}-netmask"] = address.netmask
+                    result[interface_name][
+                        f"{address_key}-broadcast"
+                    ] = address.broadcast
+
         except Exception as e:
-            logger.error("Error fetching all network interface data: %s", str(e))
-        return result
+            logger.error(f"Error fetching network interface data: {e}")
+        return dict(result)  # Convert back to regular dict for return
 
     def _get_private_ip_address(self):
         raise Exception("Not Implemented")
@@ -240,24 +246,24 @@ class BaseOperatingSystemUtils(object):
         }
 
     def prepare(self):
+        method_mapping = {
+            InformationParameter.SYSTEM: self._format_system_info,
+            InformationParameter.CPU: self._format_cpu_information,
+            InformationParameter.MEMORY: self._format_memory_information,
+            InformationParameter.DISK: self._format_disk_information,
+            InformationParameter.NETWORK: self._format_network_information,
+            InformationParameter.PUBLIC_IP: self._format_public_ip_details,
+        }
+
         result = {}
-        with Status("[bold green]Fetching Informstion...", spinner="dots") as status:
-            result[InformationParameter.SYSTEM.value] = {
-                **self._format_system_info(),
-                "boot_time": self._format_boot_time(),
-            }
-            result[InformationParameter.CPU.value] = self._format_cpu_information()
-            result[
-                InformationParameter.MEMORY.value
-            ] = self._format_memory_information()
-            result[InformationParameter.DISK.value] = self._format_disk_information()
-            result[
-                InformationParameter.NETWORK.value
-            ] = self._format_network_information()
-            result[
-                InformationParameter.PUBLIC_IP.value
-            ] = self._format_public_ip_details()
-            return result
+        with Status("[bold green]Fetching Information...", spinner="dots"):
+            for info_param, method in method_mapping.items():
+                formatted_info = method()
+                if info_param == InformationParameter.SYSTEM:
+                    formatted_info["boot_time"] = self._format_boot_time()
+                result[slug_to_title(info_param.value)] = formatted_info
+
+        return result
 
     def _create_webpage_link(self, data):
         encoded_str = encoding_result(data)
