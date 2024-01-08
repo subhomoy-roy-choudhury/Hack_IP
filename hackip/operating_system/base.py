@@ -261,7 +261,7 @@ class BaseOperatingSystemUtils(object):
                 formatted_info = method()
                 if info_param == InformationParameter.SYSTEM:
                     formatted_info["boot_time"] = self._format_boot_time()
-                result[slug_to_title(info_param.value)] = formatted_info
+                result[info_param.value] = formatted_info
 
         return result
 
