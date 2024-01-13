@@ -73,6 +73,14 @@ public_ip_details:
   postal_code: Postal code based on the public IP address
   timezone: Timezone based on the public IP address
 
+active_processes:
+  cpu_percent: Percentage of CPU usage by the process
+  username: Username under which the process is running
+  pid: Process ID (a unique identifier for each process)
+  name: Name of the process (e.g., application name)
+  memory_percent: Percentage of memory usage by the process
+  status: Current status of the process (e.g., running, sleeping)
+
 \n\n The system details is given below :- \n\n ${read_json(REPORT_FILE_PATH)} \n
 
 Please write the response based on the schema 

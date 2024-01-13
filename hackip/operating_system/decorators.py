@@ -10,7 +10,7 @@ def fetch_info_wrapper(fetch_info_name):
         def wrapper(self, *args, **kwargs):
             try:
                 result = func(self, *args, **kwargs)
-                if isinstance(result, dict):
+                if isinstance(result, (dict, list)):
                     rprint(
                         f"{get_status_symbol('pass')} Successfully Fetched {fetch_info_name}"
                     )

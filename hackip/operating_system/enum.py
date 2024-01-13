@@ -8,3 +8,4 @@ class InformationParameter(Enum):
     DISK = "disk_information"
     NETWORK = "network_information"
     PUBLIC_IP = "public_ip_details"
+    ACTIVE_PROCESSES = "active_processes"

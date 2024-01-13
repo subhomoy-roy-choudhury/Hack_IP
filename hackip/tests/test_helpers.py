@@ -81,7 +81,7 @@ def test_failure_in_url_shortening(mock_get):
     mock_get.return_value.json.return_value = {"url": {"status": 1, "shortLink": None}}
     shortened_url = get_shortened_url("http://example.com", api_key="api_key")
     assert (
-        shortened_url is "http://example.com"
+        shortened_url == "http://example.com"
     )  # or assert for an error message based on your implementation
 
 
@@ -90,7 +90,7 @@ def test_handling_invalid_url(mock_get):
     mock_get.return_value.json.return_value = {"url": {"status": 1, "shortLink": None}}
     shortened_url = get_shortened_url("invalid_url", api_key="api_key")
     assert (
-        shortened_url is "invalid_url"
+        shortened_url == "invalid_url"
     )  # or assert for an error message based on your implementation
 
 

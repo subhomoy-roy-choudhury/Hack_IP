@@ -246,6 +246,32 @@ class BaseOperatingSystemUtils(object):
             "timezone": public_ip_info["timezone"],
         }
 
+    @fetch_info_wrapper(
+        fetch_info_name=slug_to_title(InformationParameter.ACTIVE_PROCESSES.value)
+    )
+    def _format_active_processes(self):
+        # List all the processes running on the system with their details
+        processes = []
+        for proc in psutil.process_iter(
+            ["pid", "name", "username", "cpu_percent", "memory_percent", "status"]
+        ):
+            try:
+                # Get process detail as dictionary
+                process_info = proc.info
+                processes.append(process_info)
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                pass
+        # Sorting the processes based on memory and CPU usage and handling None values
+        top_processes = sorted(
+            processes, 
+            key=lambda x: (
+                (x["memory_percent"] is not None, x["memory_percent"]), 
+                (x["cpu_percent"] is not None, x["cpu_percent"])
+            ),
+            reverse=True
+        )[:20]
+        return top_processes
+
     def prepare(self):
         method_mapping = {
             InformationParameter.SYSTEM: self._format_system_info,
@@ -254,6 +280,7 @@ class BaseOperatingSystemUtils(object):
             InformationParameter.DISK: self._format_disk_information,
             InformationParameter.NETWORK: self._format_network_information,
             InformationParameter.PUBLIC_IP: self._format_public_ip_details,
+            InformationParameter.ACTIVE_PROCESSES: self._format_active_processes,
         }
 
         result = {}
