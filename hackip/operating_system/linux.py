@@ -3,8 +3,8 @@ import re
 from hackip.operating_system.base import BaseOperatingSystemUtils
 
 class LinuxUtils(BaseOperatingSystemUtils):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, cuttly_api_key) -> None:
+        super().__init__(cuttly_api_key)
         self.os_name = "Linux Operating System"
 
     def _get_private_ip_address(self):

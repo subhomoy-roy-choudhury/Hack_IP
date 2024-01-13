@@ -7,21 +7,20 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def get_shortened_url(url):
-    shortened_url = None
-    api_key = "b5a0e1bfd3c3521177a973b16ca39225b891e"
-    # preferred name in the URL
-    api_url = f"https://cutt.ly/api/api.php?key={api_key}&short={url}"
-    # or
-    # api_url = f"https://cutt.ly/api/api.php?key={api_key}&short={url}&name=some_unique_name"
-    # make the request
-    data = requests.get(api_url).json()["url"]
-    if data["status"] == 7:
-        # OK, get shortened URL
-        shortened_url = data["shortLink"]
-        logger.info(f"Shortened URL: {shortened_url}")
+def get_shortened_url(url: str, api_key: str = None):
+    shortened_url = url
+    if api_key:
+        # api_key = "b5a0e1bfd3c3521177a973b16ca39225b891e"
+        api_url = f"https://cutt.ly/api/api.php?key={api_key}&short={url}"  # "https://cutt.ly/api/api.php?key={api_key}&short={url}&name=some_unique_name"
+        data = requests.get(api_url).json()["url"]
+        if data["status"] == 7:
+            # OK, get shortened URL
+            shortened_url = data["shortLink"]
+            logger.info(f"Shortened URL: {shortened_url}")
+        else:
+            logger.critical(f"[!] Error Shortening URL: {data}")
     else:
-        logger.critical(f"[!] Error Shortening URL: {data}")
+        logger.warning("Cuttly API Token Not Found")
 
     return shortened_url
 

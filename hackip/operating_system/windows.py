@@ -4,8 +4,8 @@ from rich import print as rprint
 from hackip.operating_system.base import BaseOperatingSystemUtils
 
 class WindowsUtils(BaseOperatingSystemUtils):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, cuttly_api_key) -> None:
+        super().__init__(cuttly_api_key)
         self.os_name = "Windows Operating System"
     
     def _get_private_ip_address(self):

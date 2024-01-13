@@ -28,11 +28,12 @@ console = Console()
 
 
 class BaseOperatingSystemUtils(object):
-    def __init__(self) -> None:
+    def __init__(self, cuttly_api_key) -> None:
         self.os_name = None
         self.system_data = platform.uname()
         self.hostname = socket.gethostname()  # returns hostname
         self.private_ip_addr = None
+        self.cuttly_api_key = cuttly_api_key
 
     def _fetch_data_safely(self, fetch_function, error_message):
         try:
@@ -268,7 +269,7 @@ class BaseOperatingSystemUtils(object):
     def _create_webpage_link(self, data):
         encoded_str = encoding_result(data)
         result_link = f"{BASE_WEB_URL}/?encoded_string={quote(encoded_str.decode())}"
-        result_link = get_shortened_url(result_link)
+        result_link = get_shortened_url(result_link, self.cuttly_api_key)
         return result_link
 
     def _generate_report(self, data):
