@@ -12,9 +12,7 @@ from hackip.constants import (
     CREDENTIALS_KEYS,
 )
 
-from hackip.operating_system.linux import LinuxUtils
-from hackip.operating_system.windows import WindowsUtils
-from hackip.operating_system.macos import MacOSUtils
+from hackip.platforms.os import WindowsUtils, LinuxUtils, MacOSUtils
 
 from hackip.chat import get_client, generate_response
 from hackip.utils import load_configuration

@@ -19,8 +19,8 @@ from hackip.helpers import (
     write_json,
     slug_to_title,
 )
-from hackip.operating_system.enum import InformationParameter
-from hackip.operating_system.decorators import fetch_info_wrapper
+from hackip.platforms.utilities.enum import InformationParameter
+from hackip.platforms.utilities.decorators import fetch_info_wrapper
 from hackip.constants import BASE_WEB_URL, GENERATED_REPORT_FOLDER_NAME
 
 logger = logging.getLogger(__name__)
