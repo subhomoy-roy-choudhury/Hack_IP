@@ -1,3 +1,4 @@
+import sys
 import platform
 from rich import print as rprint
 from art import text2art
@@ -16,62 +17,68 @@ from hackip.chat import generate_response
 setup_logging()
 
 
-class HackIP(object):
-    def __init__(self) -> None:
+class HackIP:
+    def __init__(self):
         self.banner_text = "HackIP"
 
     def introduction(self):
-        # Generate ASCII art text
-        ascii_art = text2art(self.banner_text)
-
-        # Print using rich for colored output
-        rprint(f"[green]{ascii_art}")
+        try:
+            ascii_art = text2art(self.banner_text)
+            rprint(f"[green]{ascii_art}")
+        except Exception as e:
+            print(f"Error in generating ASCII art: {e}")
 
     def get_os_utility(self):
-        system_data = platform.uname()
-        os_name = str(system_data.system)
+        try:
+            system_data = platform.uname()
+            os_name = str(system_data.system).lower()
 
-        if os_name.lower() == "windows":
-            return WindowsUtils()
-
-        elif os_name.lower() == "linux":
-            return LinuxUtils()
-
-        elif os_name.lower() == "darwin":
-            return MacOSUtils()
-
-        else:
-            raise Exception("Invalid Operating System")
-
-    def check_configuration(self):
-        pass
+            if os_name == "windows":
+                return WindowsUtils()
+            elif os_name == "linux":
+                return LinuxUtils()
+            elif os_name == "darwin":
+                return MacOSUtils()
+            else:
+                raise ValueError("Unsupported Operating System")
+        except Exception as e:
+            print(f"Error in detecting OS: {e}")
+            sys.exit(1)
 
     def chat(self):
         while True:
-            message = str(input("Hacker :- "))
-            if message.lower() == "quit":
-                break
-            assistant_message=generate_response(message)
-            print(f"Assistant :- {assistant_message}")
-        
+            try:
+                message = str(input("Hacker :- ")).strip()
+                if message.lower() in ["quit", "exit"]:
+                    print("Exiting chat.")
+                    break
 
-    def start(self, *args, **kwargs):
-        # Introduction
+                try:
+                    assistant_message = generate_response(message)
+                    rprint(f"Assistant :- {assistant_message}")
+                except Exception as e:
+                    print(f"Error generating response: {e}")
+
+            except KeyboardInterrupt:
+                print("\nChat interrupted by user. Exiting...")
+                break  # Use break instead of sys.exit(0) for cleaner exit
+
+    def start(self):
         # self.introduction()
-
-        # Create Reports Folder
         create_folder(GENERATED_REPORT_FOLDER_NAME)
 
-        # System Information
         os_object = self.get_os_utility()
-        os_object.stdout()
+        if os_object:
+            os_object.stdout()
 
-        # Chat with data
         self.chat()
 
 
 def execute():
-    HackIP().start()
+    try:
+        HackIP().start()
+    except Exception as e:
+        print(f"Error during execution: {e}")
 
 
 if __name__ == "__main__":

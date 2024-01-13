@@ -1,9 +1,14 @@
 import os
+import logging
 from openai import OpenAI
+
+from rich import print as rprint
 
 from hackip.utils import load_configuration
 from hackip.helpers import read_json
 from hackip.constants import GENERATED_REPORT_FOLDER_NAME
+
+logger = logging.getLogger(__name__)
 
 # OpenAI Client
 client = OpenAI(api_key=load_configuration()["credentials"]["openai_key"])
@@ -81,6 +86,9 @@ CHAT_HISTORY = [{"role": "system", "content": INITIAL_PROMPT}]
 
 
 def generate_response(input):
+    """
+    Generates a response from the chatbot based on the input and updates the chat history.
+    """
     CHAT_HISTORY.append({"role": "user", "content": input})
     assistant_response = get_completion(CHAT_HISTORY)
     CHAT_HISTORY.append({"role": "assistant", "content": assistant_response})
@@ -88,9 +96,15 @@ def generate_response(input):
 
 
 def get_completion(messages, model="gpt-3.5-turbo"):
-    response = client.chat.completions.create(
-        model=model,
-        messages=messages,
-        temperature=0.9,  # this is the degree of randomness of the model's output
-    )
-    return response.choices[0].message.content
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            temperature=0.9,  # this is the degree of randomness of the model's output
+        )
+        return response.choices[
+            0
+        ].message.content  # Corrected the indentation of this line
+    except Exception as e:
+        logger.error(f"OpenAI text generation failed: {str(e)}")
+    return "[red]OpenAI text generation failed[/red]"
