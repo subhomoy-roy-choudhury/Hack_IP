@@ -9,6 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/hackip/main.py",
+            // "args": ["--details"],
             "console": "integratedTerminal",
             "justMyCode": true
         },

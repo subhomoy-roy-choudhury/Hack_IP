@@ -1,6 +1,8 @@
 import sys
 import platform
+import argparse
 import logging
+
 from rich import print as rprint
 from art import text2art
 
@@ -12,7 +14,7 @@ from hackip.constants import (
     CREDENTIALS_KEYS,
 )
 
-from hackip.platforms.os import WindowsUtils, LinuxUtils, MacOSUtils
+from hackip.platforms.os import WindowsOS, LinuxOS, MacOS
 
 from hackip.chat import get_client, generate_response
 from hackip.utils import load_configuration
@@ -25,8 +27,9 @@ logger = logging.getLogger(__name__)
 class HackIP:
     BANNER_TEXT = "HackIP"
 
-    def __init__(self, configuration):
+    def __init__(self, configuration, advanced_scanning = False):
         self.configuration = configuration
+        self.advanced_scanning = advanced_scanning
 
     def introduction(self):
         try:
@@ -38,9 +41,9 @@ class HackIP:
     def get_os_utility(self):
         os_name = platform.system().lower()
         os_util_class = {
-            "windows": WindowsUtils,
-            "linux": LinuxUtils,
-            "darwin": MacOSUtils,
+            "windows": WindowsOS,
+            "linux": LinuxOS,
+            "darwin": MacOS,
         }.get(os_name)
 
         if os_util_class is None:
@@ -55,7 +58,7 @@ class HackIP:
             if cuttly_api_key is None:
                 logger.warning("Cuttly API key not found in configuration.")
 
-            return os_util_class(cuttly_api_key=cuttly_api_key)
+            return os_util_class(cuttly_api_key=cuttly_api_key, advanced_scanning=self.advanced_scanning)
 
         except Exception as e:
             rprint(f"[red]Error while initializing OS utility: {e}[/red]")
@@ -100,10 +103,20 @@ class HackIP:
 
 def execute():
     try:
+        # Create the parser
+        parser = argparse.ArgumentParser(description='Sample argparse program')
+
+        # Add arguments
+        parser.add_argument('-d', '--details', action='store_true', help='Advanced Detailed Scanning')
+        parser.add_argument('--verbose', action='store_true', help='Verbose mode')
+
+        # Parse arguments
+        args = parser.parse_args()
+
         # Load configuration
         configuration = load_configuration()
         # Start HackIP
-        HackIP(configuration).start()
+        HackIP(configuration, args.details).start()
     except Exception as e:
         print(f"Error during execution: {e}")
 

@@ -9,3 +9,4 @@ class InformationParameter(Enum):
     NETWORK = "network_information"
     PUBLIC_IP = "public_ip_details"
     ACTIVE_PROCESSES = "active_processes"
+    NETWORK_OPEN_PORTS = "network_open_ports"

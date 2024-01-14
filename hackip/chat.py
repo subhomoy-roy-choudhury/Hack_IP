@@ -81,6 +81,18 @@ active_processes:
   memory_percent: Percentage of memory usage by the process
   status: Current status of the process (e.g., running, sleeping)
 
+network_open_ports:
+  host: IP address of the host providing the service
+  port: Network port on which the service is running
+  state: Current state of the service (e.g., open, closed)
+  name: General name of the service (e.g., http, ftp)
+  product: Specific product name (e.g., software or framework running the service)
+  version: Version of the product or service
+  extrainfo: Additional information about the service, if available
+  reason: Reason for the service state (e.g., syn-ack for open ports)
+  conf: Confidence level in the service information (scale or value)
+  service_name: Known or identified name of the service; "Unknown" if not identified
+
 \n\n The system details is given below :- \n\n ${read_json(REPORT_FILE_PATH)} \n
 
 Please write the response based on the schema 
@@ -98,9 +110,11 @@ def generate_response(client, input):
     CHAT_HISTORY.append({"role": "assistant", "content": assistant_response})
     return assistant_response
 
+
 def get_client(api_key):
     client = OpenAI(api_key=api_key)
     return client
+
 
 def get_completion(client, messages, model="gpt-3.5-turbo"):
     try:

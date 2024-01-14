@@ -22,18 +22,26 @@ from hackip.helpers import (
 from hackip.platforms.utilities.enum import InformationParameter
 from hackip.platforms.utilities.decorators import fetch_info_wrapper
 from hackip.constants import BASE_WEB_URL, GENERATED_REPORT_FOLDER_NAME
+from hackip.platforms.scanners.nmap_port_scanner import (
+    find_open_ports as find_open_ports_advanced,
+)
+from hackip.platforms.scanners.port_scanners import (
+    find_open_ports as find_open_ports_basic,
+)
+from hackip.platforms.scanners.helpers import get_service_name, get_local_ip_addresses
 
 logger = logging.getLogger(__name__)
 console = Console()
 
 
-class BaseOperatingSystemUtils(object):
-    def __init__(self, cuttly_api_key) -> None:
+class BaseOperatingSystem(object):
+    def __init__(self, cuttly_api_key, advanced_scanning=False) -> None:
         self.os_name = None
         self.system_data = platform.uname()
         self.hostname = socket.gethostname()  # returns hostname
         self.private_ip_addr = None
         self.cuttly_api_key = cuttly_api_key
+        self.advanced_scanning = advanced_scanning
 
     def _fetch_data_safely(self, fetch_function, error_message):
         try:
@@ -263,14 +271,34 @@ class BaseOperatingSystemUtils(object):
                 pass
         # Sorting the processes based on memory and CPU usage and handling None values
         top_processes = sorted(
-            processes, 
+            processes,
             key=lambda x: (
-                (x["memory_percent"] is not None, x["memory_percent"]), 
-                (x["cpu_percent"] is not None, x["cpu_percent"])
+                (x["memory_percent"] is not None, x["memory_percent"]),
+                (x["cpu_percent"] is not None, x["cpu_percent"]),
             ),
-            reverse=True
+            reverse=True,
         )[:20]
         return top_processes
+
+    @fetch_info_wrapper(
+        fetch_info_name=slug_to_title(InformationParameter.NETWORK_OPEN_PORTS.value)
+    )
+    def _format_open_ports(self) -> list:
+        target_ips = get_local_ip_addresses()
+        port_range = (20, 10255)
+
+        # Choose the appropriate scanning function
+        scan_func = find_open_ports_advanced if self.advanced_scanning else find_open_ports_basic
+
+        open_ports = scan_func(target_ips, port_range)
+        if self.advanced_scanning:
+            return list(
+                map(lambda details: dict(**details, service_name=get_service_name(details["port"])), open_ports)
+            )
+        else:
+            return list(
+                map(lambda port: dict(port=port, service_name=get_service_name(port)), open_ports)
+            )
 
     def prepare(self):
         method_mapping = {
@@ -281,6 +309,7 @@ class BaseOperatingSystemUtils(object):
             InformationParameter.NETWORK: self._format_network_information,
             InformationParameter.PUBLIC_IP: self._format_public_ip_details,
             InformationParameter.ACTIVE_PROCESSES: self._format_active_processes,
+            InformationParameter.NETWORK_OPEN_PORTS: self._format_open_ports,
         }
 
         result = {}

@@ -1,20 +1,20 @@
 import os
 import socket
 import re
-from hackip.platforms.base import BaseOperatingSystemUtils
+from hackip.platforms.base import BaseOperatingSystem
 
-class WindowsUtils(BaseOperatingSystemUtils):
-    def __init__(self, cuttly_api_key) -> None:
-        super().__init__(cuttly_api_key)
+class WindowsOS(BaseOperatingSystem):
+    def __init__(self, cuttly_api_key, advanced_scanning) -> None:
+        super().__init__(cuttly_api_key, advanced_scanning)
         self.os_name = "Windows Operating System"
     
     def _get_private_ip_address(self):
         self.private_ip_addr = socket.gethostbyname_ex(self.hostname)[-1][-1]
         return self.private_ip_addr
     
-class LinuxUtils(BaseOperatingSystemUtils):
-    def __init__(self, cuttly_api_key) -> None:
-        super().__init__(cuttly_api_key)
+class LinuxOS(BaseOperatingSystem):
+    def __init__(self, cuttly_api_key, advanced_scanning) -> None:
+        super().__init__(cuttly_api_key, advanced_scanning)
         self.os_name = "Linux Operating System"
 
     def _get_private_ip_address(self):
@@ -24,9 +24,9 @@ class LinuxUtils(BaseOperatingSystemUtils):
         self.private_ip_addr = strings[-2]
         return self.private_ip_addr
     
-class MacOSUtils(BaseOperatingSystemUtils):
-    def __init__(self, cuttly_api_key) -> None:
-        super().__init__(cuttly_api_key)
+class MacOS(BaseOperatingSystem):
+    def __init__(self, cuttly_api_key, advanced_scanning) -> None:
+        super().__init__(cuttly_api_key, advanced_scanning)
         self.os_name = "Mac Operating System"
     
     def _get_private_ip_address(self):
