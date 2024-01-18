@@ -112,6 +112,7 @@ def generate_response(client, input):
 
 
 def get_client(api_key):
+    # OpenAI Client
     client = OpenAI(api_key=api_key)
     return client
 
@@ -130,3 +131,37 @@ def get_completion(client, messages, model="gpt-3.5-turbo"):
     except Exception as e:
         logger.error(f"OpenAI text generation failed: {str(e)}")
     return "[red]OpenAI text generation failed[/red]"
+
+
+def create_assistant(client, uploaded_file, model="gpt-4-1106-preview"):
+    assistant = client.beta.assistants.create(
+        name="Cyber Security Expert",
+        instructions=INITIAL_PROMPT,
+        model=model,
+        tools=[{"type": "retrieval"}],
+        file_ids=[uploaded_file.id],
+    )
+    return assistant
+
+
+def upload_file(client):
+    # Upload a file with an "assistants" purpose
+    file_to_upload = client.files.create(
+        file=open("report/overall-report.json", "rb"), purpose="assistants"
+    )
+    return file_to_upload
+
+
+def get_completion_v1(client, messages, model="gpt-3.5-turbo"):
+    try:
+        uploaded_file = upload_file(client)
+        assistant = create_assistant(client, uploaded_file)
+        pass
+    except Exception as e:
+        logger.error(f"OpenAI text generation failed: {str(e)}")
+    return "[red]OpenAI text generation failed[/red]"
+
+
+if __name__ == "__main__":
+    client = get_client(api_key="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")
+    assistant_message = get_completion_v1(client, "test the flow")
