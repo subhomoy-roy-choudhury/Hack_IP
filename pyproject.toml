@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hack-ip"
-version = "2.0.0"
+version = "2.1.0"
 description = "A tool to get IP and system information of a specific device."
 authors = ["Subhomoy Roy Choudhury <subhomoyrchoudhury@gmail.com>"]
 license = "MIT"
