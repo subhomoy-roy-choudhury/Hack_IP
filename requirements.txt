@@ -1,5 +1,0 @@
-termcolor
-psutil
-requests
-maxminddb-geolite2
-rich
