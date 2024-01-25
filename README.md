@@ -128,6 +128,7 @@ Distributed under the MIT License. See [LICENSE](https://github.com/subhomoy-roy
 
 ## Contact
 **Subhomoy Roy Choudhury** - *SDE at Fynd* - [Github](https://src-portfolio.oderna.in/link/GITHUB) - [Linkedin](https://src-portfolio.oderna.in/link/LINKEDIN) - [Twitter](https://src-portfolio.oderna.in/link/TWITTER)
+
 Project Link: [https://github.com/subhomoy-roy-choudhury/Hack_IP](https://github.com/subhomoy-roy-choudhury/Hack_IP)
 
 ## Acknowledgements
