@@ -10,11 +10,11 @@ from constants import (
     CREDENTIALS_KEYS,
     GENERATED_REPORT_FOLDER_NAME,
 )
-from helpers import create_folder
-from logger_config import setup_logging
-from platforms.os import LinuxOS, MacOS, WindowsOS
+from .helpers import create_folder
+from .logger_config import setup_logging
+from .platforms.os import LinuxOS, MacOS, WindowsOS
 from rich import print as rprint
-from utils import load_configuration
+from .utils import load_configuration
 
 # Setup logging
 setup_logging()

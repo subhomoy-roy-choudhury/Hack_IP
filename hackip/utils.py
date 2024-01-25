@@ -1,11 +1,11 @@
 import configparser
 
-from constants import (
+from .constants import (
     CONFIGURATION_FILE_PATH,
     CONFIGURATION_SECTION_KEYS,
     CREDENTIALS_KEYS,
 )
-from helpers import get_status_symbol
+from .helpers import get_status_symbol
 from rich import print as rprint
 
 

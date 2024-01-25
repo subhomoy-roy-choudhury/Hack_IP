@@ -8,21 +8,21 @@ from urllib.parse import quote
 
 import psutil
 import requests
-from constants import BASE_WEB_URL, GENERATED_REPORT_FOLDER_NAME
-from helpers import (
+from ..constants import BASE_WEB_URL, GENERATED_REPORT_FOLDER_NAME
+from ..helpers import (
     encoding_result,
     get_shortened_url,
     get_size,
     slug_to_title,
     write_json,
 )
-from platforms.scanners.helpers import get_local_ip_addresses, get_service_name
-from platforms.scanners.nmap_port_scanner import (
+from .scanners.helpers import get_local_ip_addresses, get_service_name
+from .scanners.nmap_port_scanner import (
     find_open_ports as find_open_ports_advanced,
 )
-from platforms.scanners.port_scanners import find_open_ports as find_open_ports_basic
-from platforms.utilities.decorators import fetch_info_wrapper
-from platforms.utilities.enum import InformationParameter
+from .scanners.port_scanners import find_open_ports as find_open_ports_basic
+from .utilities.decorators import fetch_info_wrapper
+from .utilities.enum import InformationParameter
 from rich.console import Console
 from rich.panel import Panel
 from rich.status import Status
