@@ -15,6 +15,9 @@ venv:
 	@python3 -m venv $(VENV)
 	@echo "Virtual environment created."
 
+pre-commit:
+	@pre-commit install
+
 deps:
 	@echo "Installing dependencies..."
 	@$(ACTIVATE_VENV) && pip install --upgrade pip wheel
