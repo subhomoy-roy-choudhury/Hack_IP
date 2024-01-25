@@ -1,10 +1,10 @@
 <br/>
 <p align="center">
   <a href="https://github.com/subhomoy-roy-choudhury/Hack_IP">
-    <img src="https://socialify.git.ci/subhomoy-roy-choudhury/Hack_IP/image?description=1&font=Inter&forks=1&issues=1&language=1&name=1&owner=1&pattern=Signal&pulls=1&stargazers=1&theme=Light" alt="Hack_IP" width="640" height="320" />
+    <img src="https://svg-banners.vercel.app/api?type=luminance&text1=Hack%20IP%20🕵🏻‍♂️&width=800&height=300" alt="Hack_IP" width="640" height="320" />
   </a>
 
-  <h3 align="center">Hack IP</h3>
+  <!-- <h3 align="center">Hack IP</h3> -->
 
   <p align="center">
     CLI Tool to gather System Information, IP Address, and device location.
@@ -98,6 +98,11 @@ hackip [OPTIONS]
 Each option is detailed below:
 - `--details` : Advanced Detailed Scanning using Nmap
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=subhomoy-roy-choudhury/Hack_IP&type=Date)](https://star-history.com/#subhomoy-roy-choudhury/Hack_IP&Date)
+
+
 ## Roadmap
 
 See the [open issues](https://github.com/subhomoy-roy-choudhury/Hack_IP/issues) for a list of proposed features (and known issues).
@@ -130,5 +135,4 @@ Project Link: [https://github.com/subhomoy-roy-choudhury/Hack_IP](https://github
 * [Open AI](https://openai.com/)
 * [Poetry](https://www.poetryfoundation.org/)
 * [Nmap](https://nmap.org/)
-* [ImgShields](https://shields.io/)
-* [Github Socialify](https://socialify.git.ci/)
+* [Beautify Github Readme](https://github.com/rzashakeri/beautify-github-profile)
