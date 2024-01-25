@@ -1,34 +1,31 @@
+import logging
 import os
 import platform
-import psutil
 import socket
-import logging
-import requests
-from urllib.parse import quote
-from datetime import datetime
 from collections import defaultdict
+from datetime import datetime
+from urllib.parse import quote
 
-from rich.console import Console
-from rich.status import Status
-from rich.panel import Panel
-
-from hackip.helpers import (
-    get_size,
+import psutil
+import requests
+from constants import BASE_WEB_URL, GENERATED_REPORT_FOLDER_NAME
+from helpers import (
     encoding_result,
     get_shortened_url,
-    write_json,
+    get_size,
     slug_to_title,
+    write_json,
 )
-from hackip.platforms.utilities.enum import InformationParameter
-from hackip.platforms.utilities.decorators import fetch_info_wrapper
-from hackip.constants import BASE_WEB_URL, GENERATED_REPORT_FOLDER_NAME
-from hackip.platforms.scanners.nmap_port_scanner import (
+from platforms.scanners.helpers import get_local_ip_addresses, get_service_name
+from platforms.scanners.nmap_port_scanner import (
     find_open_ports as find_open_ports_advanced,
 )
-from hackip.platforms.scanners.port_scanners import (
-    find_open_ports as find_open_ports_basic,
-)
-from hackip.platforms.scanners.helpers import get_service_name, get_local_ip_addresses
+from platforms.scanners.port_scanners import find_open_ports as find_open_ports_basic
+from platforms.utilities.decorators import fetch_info_wrapper
+from platforms.utilities.enum import InformationParameter
+from rich.console import Console
+from rich.panel import Panel
+from rich.status import Status
 
 logger = logging.getLogger(__name__)
 console = Console()
@@ -288,16 +285,28 @@ class BaseOperatingSystem(object):
         port_range = (20, 10255)
 
         # Choose the appropriate scanning function
-        scan_func = find_open_ports_advanced if self.advanced_scanning else find_open_ports_basic
+        scan_func = (
+            find_open_ports_advanced
+            if self.advanced_scanning
+            else find_open_ports_basic
+        )
 
         open_ports = scan_func(target_ips, port_range)
         if self.advanced_scanning:
             return list(
-                map(lambda details: dict(**details, service_name=get_service_name(details["port"])), open_ports)
+                map(
+                    lambda details: dict(
+                        **details, service_name=get_service_name(details["port"])
+                    ),
+                    open_ports,
+                )
             )
         else:
             return list(
-                map(lambda port: dict(port=port, service_name=get_service_name(port)), open_ports)
+                map(
+                    lambda port: dict(port=port, service_name=get_service_name(port)),
+                    open_ports,
+                )
             )
 
     def prepare(self):

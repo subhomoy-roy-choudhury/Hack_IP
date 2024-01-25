@@ -1,7 +1,8 @@
 import os
-import socket
 import re
-from hackip.platforms.base import BaseOperatingSystem
+import socket
+
+from platforms.base import BaseOperatingSystem
 
 
 class UnixLikeOS(BaseOperatingSystem):

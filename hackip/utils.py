@@ -1,11 +1,12 @@
 import configparser
-from rich import print as rprint
-from hackip.constants import (
+
+from constants import (
     CONFIGURATION_FILE_PATH,
     CONFIGURATION_SECTION_KEYS,
     CREDENTIALS_KEYS,
 )
-from hackip.helpers import get_status_symbol
+from helpers import get_status_symbol
+from rich import print as rprint
 
 
 def load_configuration():
