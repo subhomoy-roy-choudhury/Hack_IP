@@ -1,6 +1,7 @@
 import logging
+
+from helpers import get_status_symbol
 from rich import print as rprint
-from hackip.helpers import get_status_symbol
 
 logger = logging.getLogger(__name__)
 

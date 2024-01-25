@@ -20,7 +20,7 @@
             "module": "pytest",
             "args": [
                 "-v", // verbose output
-                "hackip/tests" // path to your tests
+                "tests" // path to your tests
             ],
             "console": "integratedTerminal"
         }

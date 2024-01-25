@@ -1,8 +1,10 @@
-import os
-import json
 import base64
-import requests
+import json
 import logging
+import os
+import re
+
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -48,21 +50,30 @@ def encoding_result(dictionary):
     return base64_dict
 
 
-def slug_to_title(slug, seperator = "_"):
+def slug_to_title(slug, seperator="_"):
     words = slug.split(seperator)  # Split the slug by hyphens
     title_cased_words = [word.capitalize() for word in words]  # Capitalize each word
     return " ".join(title_cased_words)  # Join the words with spaces
 
+
 def write_json(filename, data):
+    # Check if file doesn't exist and create it if necessary
+    if not os.path.exists(filename):
+        # Perform any specific action if the file does not exist
+        logger.error(f"File {filename} does not exist. Creating new file.")
+        open(filename, "w").close()  # Create the file
+
     # Writing JSON data
-    with open(filename, 'w') as file:
+    with open(filename, "w") as file:
         json.dump(data, file, indent=4)
+
 
 def read_json(filename):
     # Reading the JSON data
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         data = json.load(file)
     return data
+
 
 # Function to get symbol for test case status
 def get_status_symbol(status):
@@ -70,7 +81,30 @@ def get_status_symbol(status):
         return "[green]:heavy_check_mark:"  # Green tick
     elif status == "fail":
         return "[red]:x:"  # Red cross
-    
+
+
 def create_folder(foldername):
-    if not os.path.exists(foldername):
-        os.makedirs(foldername)
+    # Check for empty folder name
+    if not foldername:
+        raise ValueError("Folder name cannot be empty")
+
+    # Check for invalid characters in folder name (adjust regex as needed)
+    if re.search(r'[<>:"/\\|?*]', foldername):
+        raise ValueError("Folder name contains invalid characters")
+
+    # Check for overly long folder names
+    if len(foldername) > 255:  # Adjust based on filesystem limits
+        raise ValueError("Folder name is too long")
+
+    # Construct the full path
+    full_path = os.path.join(os.getcwd(), foldername)
+
+    # Check if the folder already exists
+    if os.path.exists(full_path):
+        return
+
+    # Try to create the folder, handle potential permission error
+    try:
+        os.makedirs(full_path)
+    except PermissionError:
+        raise PermissionError("Insufficient permissions to create the folder")

@@ -2,9 +2,14 @@
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
+
 [tool.poetry]
 name = "hack-ip"
-version = "0.0.0"
+version = "2.4.0"
 description = "This is a tool to get IP and system information of a specific device"
 authors = ["Subhomoy Roy Choudhury <subhomoyrchoudhury@gmail.com>"]
 license = "MIT"
@@ -24,10 +29,6 @@ classifiers = [
 ]
 packages = [{ include = "hackip" }]
 
-[tool.poetry-dynamic-versioning]
-enable = true
-style = "semver"
-
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
 rich = "^12.6.0"
@@ -45,7 +46,6 @@ flake8 = "^6.1.0"
 tox = "^4.11.4"
 poetry-dynamic-versioning = "^1.2.0"
 pre-commit = { version = "^3.6.0", python = ">=3.9" }
-isort = "^5.13.2"
 
 [tool.isort]
 profile = "black"

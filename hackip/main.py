@@ -1,23 +1,20 @@
-import sys
-import platform
 import argparse
 import logging
+import platform
+import sys
 
-from rich import print as rprint
 from art import text2art
-
-from hackip.logger_config import setup_logging
-from hackip.helpers import create_folder
-from hackip.constants import (
-    GENERATED_REPORT_FOLDER_NAME,
+from chat import generate_response, get_client
+from constants import (
     CONFIGURATION_SECTION_KEYS,
     CREDENTIALS_KEYS,
+    GENERATED_REPORT_FOLDER_NAME,
 )
-
-from hackip.platforms.os import WindowsOS, LinuxOS, MacOS
-
-from hackip.chat import get_client, generate_response
-from hackip.utils import load_configuration
+from helpers import create_folder
+from logger_config import setup_logging
+from platforms.os import LinuxOS, MacOS, WindowsOS
+from rich import print as rprint
+from utils import load_configuration
 
 # Setup logging
 setup_logging()
@@ -27,7 +24,7 @@ logger = logging.getLogger(__name__)
 class HackIP:
     BANNER_TEXT = "HackIP"
 
-    def __init__(self, configuration, advanced_scanning = False):
+    def __init__(self, configuration, advanced_scanning=False):
         self.configuration = configuration
         self.advanced_scanning = advanced_scanning
 
@@ -58,7 +55,9 @@ class HackIP:
             if cuttly_api_key is None:
                 logger.warning("Cuttly API key not found in configuration.")
 
-            return os_util_class(cuttly_api_key=cuttly_api_key, advanced_scanning=self.advanced_scanning)
+            return os_util_class(
+                cuttly_api_key=cuttly_api_key, advanced_scanning=self.advanced_scanning
+            )
 
         except Exception as e:
             rprint(f"[red]Error while initializing OS utility: {e}[/red]")
@@ -104,11 +103,13 @@ class HackIP:
 def execute():
     try:
         # Create the parser
-        parser = argparse.ArgumentParser(description='Sample argparse program')
+        parser = argparse.ArgumentParser(description="Sample argparse program")
 
         # Add arguments
-        parser.add_argument('-d', '--details', action='store_true', help='Advanced Detailed Scanning')
-        parser.add_argument('--verbose', action='store_true', help='Verbose mode')
+        parser.add_argument(
+            "-d", "--details", action="store_true", help="Advanced Detailed Scanning"
+        )
+        parser.add_argument("--verbose", action="store_true", help="Verbose mode")
 
         # Parse arguments
         args = parser.parse_args()

@@ -1,7 +1,16 @@
-import pytest
 import base64
-from hackip.helpers import get_shortened_url, get_size, encoding_result, slug_to_title
+import os
 from unittest.mock import patch
+
+import pytest
+
+from hackip.helpers import (
+    create_folder,
+    encoding_result,
+    get_shortened_url,
+    get_size,
+    slug_to_title,
+)
 
 
 def test_zero_bytes():
@@ -116,3 +125,27 @@ def test_with_numbers_and_special_characters():
 
 def test_with_leading_and_trailing_hyphens():
     assert slug_to_title("_leading_trailing_") == " Leading Trailing "
+
+
+@pytest.fixture
+def setup_and_teardown_folder():
+    """Fixture to create a test directory and clean up after the test."""
+    foldername = "test_folder"
+    yield foldername
+    if os.path.exists(foldername):
+        os.rmdir(foldername)
+
+
+def test_folder_creation(setup_and_teardown_folder):
+    """Test if a folder is successfully created."""
+    foldername = setup_and_teardown_folder
+    create_folder(foldername)
+    assert os.path.isdir(foldername)
+
+
+def test_existing_folder(setup_and_teardown_folder):
+    """Test the behavior when the folder already exists."""
+    foldername = setup_and_teardown_folder
+    os.makedirs(foldername)
+    create_folder(foldername)  # Should not raise an exception
+    assert os.path.isdir(foldername)
