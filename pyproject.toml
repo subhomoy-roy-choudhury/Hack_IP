@@ -9,7 +9,7 @@ style = "semver"
 
 [tool.poetry]
 name = "hack-ip"
-version = "0.0.0"
+version = "2.4.0"
 description = "This is a tool to get IP and system information of a specific device"
 authors = ["Subhomoy Roy Choudhury <subhomoyrchoudhury@gmail.com>"]
 license = "MIT"

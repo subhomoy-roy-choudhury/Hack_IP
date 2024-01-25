@@ -29,6 +29,8 @@ jobs:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
         run: |
           poetry config pypi-token.pypi $POETRY_PYPI_TOKEN_PYPI
+          POETRY_VERSION=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
+          poetry version $POETRY_VERSION
           poetry publish --build  # for testing add  `--repository testpypi` at the end
 
       - name: Publish release
