@@ -4,8 +4,8 @@ import platform
 import sys
 
 from art import text2art
-from chat import generate_response, get_client
-from constants import (
+from .chat import generate_response, get_client
+from .constants import (
     CONFIGURATION_SECTION_KEYS,
     CREDENTIALS_KEYS,
     GENERATED_REPORT_FOLDER_NAME,
