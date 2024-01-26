@@ -3,6 +3,8 @@ from enum import Enum
 BASE_WEB_URL = "http://localhost:3000"
 GENERATED_REPORT_FOLDER_NAME = "report"
 CONFIGURATION_FILE_PATH = "./config.ini"
+ASSISTANT_NAME = "HackIP Assistant"
+ASSISTANT_MODEL = "gpt-3.5-turbo-16k"
 
 
 class CONFIGURATION_SECTION_KEYS(Enum):

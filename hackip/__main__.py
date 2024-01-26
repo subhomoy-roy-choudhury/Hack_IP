@@ -4,7 +4,7 @@ import platform
 import sys
 
 from art import text2art
-from .chat import generate_response, get_client
+from .chat import generate_response
 from .constants import (
     CONFIGURATION_SECTION_KEYS,
     CREDENTIALS_KEYS,
@@ -84,8 +84,7 @@ class HackIP:
                     print("Exiting chat.")
                     break
 
-                client = get_client(api_key=openai_key)
-                assistant_message = generate_response(client, message)
+                assistant_message = generate_response(openai_key, message)
                 rprint(f"Assistant :- {assistant_message}")
 
             except KeyboardInterrupt:
