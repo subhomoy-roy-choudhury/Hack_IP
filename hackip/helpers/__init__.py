@@ -108,3 +108,15 @@ def create_folder(foldername):
         os.makedirs(full_path)
     except PermissionError:
         raise PermissionError("Insufficient permissions to create the folder")
+
+
+def file_exists(file_path):
+    """Check if a file exists at the given file path.
+
+    Args:
+        file_path (str): The path of the file to check.
+
+    Returns:
+        bool: True if the file exists, False otherwise.
+    """
+    return os.path.exists(file_path)

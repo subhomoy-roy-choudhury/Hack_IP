@@ -52,6 +52,10 @@ class HackIP:
                 CONFIGURATION_SECTION_KEYS.CREDENTIALS.value,
                 CREDENTIALS_KEYS.CUTTLY_API_KEY.value[0],
             )
+        except Exception as e:
+            cuttly_api_key = None
+
+        try:
             if cuttly_api_key is None:
                 logger.warning("Cuttly API key not found in configuration.")
 
@@ -64,11 +68,12 @@ class HackIP:
             sys.exit(1)
 
     def chat(self):
-        openai_key = self.configuration.get(
-            CONFIGURATION_SECTION_KEYS.CREDENTIALS.value,
-            CREDENTIALS_KEYS.OPENAI_API_KEY.value[0],
-        )
-        if not openai_key:
+        try:
+            openai_key = self.configuration.get(
+                CONFIGURATION_SECTION_KEYS.CREDENTIALS.value,
+                CREDENTIALS_KEYS.OPENAI_API_KEY.value[0],
+            )
+        except Exception as _:
             rprint("[red]Error finding OpenAI API key[/red]")
             return
 
@@ -102,25 +107,18 @@ class HackIP:
 
 def execute():
     try:
-        # Create the parser
         parser = argparse.ArgumentParser(description="Sample argparse program")
-
-        # Add arguments
         parser.add_argument(
             "-d", "--details", action="store_true", help="Advanced Detailed Scanning"
         )
         parser.add_argument("--verbose", action="store_true", help="Verbose mode")
-
-        # Parse arguments
         args = parser.parse_args()
 
         # Load configuration
         configuration = load_configuration()
+
         # Start HackIP
         HackIP(configuration, args.details).start()
+
     except Exception as e:
         print(f"Error during execution: {e}")
-
-
-if __name__ == "__main__":
-    execute()

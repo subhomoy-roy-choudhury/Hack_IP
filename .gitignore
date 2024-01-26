@@ -14,3 +14,5 @@ dist
 
 report/*
 config.ini
+
+Pipfile.*

@@ -8,7 +8,7 @@
             "name": "Python: Run CLI Tool",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/hackip/main.py",
+            "program": "${workspaceFolder}/run.local.py",
             // "args": ["--details"],
             "console": "integratedTerminal",
             "justMyCode": true

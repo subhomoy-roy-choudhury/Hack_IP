@@ -343,7 +343,8 @@ class BaseOperatingSystem(object):
                 os.path.join(GENERATED_REPORT_FOLDER_NAME, "overall-report.json"), data
             )
             console.print(
-                "\n[+] Successfully generated system report", style="bold bright_blue"
+                "\n[+] Successfully generated system report \n",
+                style="bold bright_blue",
             )
         except Exception as e:
             raise ValueError("Error Generating Report")
