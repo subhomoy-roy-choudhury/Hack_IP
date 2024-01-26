@@ -1,6 +1,6 @@
 import logging
 
-from helpers import get_status_symbol
+from ...helpers import get_status_symbol
 from rich import print as rprint
 
 logger = logging.getLogger(__name__)

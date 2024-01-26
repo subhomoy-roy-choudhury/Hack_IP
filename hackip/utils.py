@@ -1,15 +1,19 @@
 import configparser
 
-from constants import (
+from .constants import (
     CONFIGURATION_FILE_PATH,
     CONFIGURATION_SECTION_KEYS,
     CREDENTIALS_KEYS,
 )
-from helpers import get_status_symbol
+from .helpers import get_status_symbol, file_exists
 from rich import print as rprint
 
 
 def load_configuration():
+    if not file_exists(CONFIGURATION_FILE_PATH):
+        rprint("[red]Configuration File Not Found[/red]")
+        return
+
     config = configparser.ConfigParser()
     # Read the config.ini file
     config.read(CONFIGURATION_FILE_PATH)

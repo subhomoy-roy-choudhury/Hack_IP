@@ -2,7 +2,7 @@ import os
 import re
 import socket
 
-from platforms.base import BaseOperatingSystem
+from .base import BaseOperatingSystem
 
 
 class UnixLikeOS(BaseOperatingSystem):

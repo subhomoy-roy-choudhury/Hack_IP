@@ -51,4 +51,4 @@ pre-commit = { version = "^3.6.0", python = ">=3.9" }
 profile = "black"
 
 [tool.poetry.scripts]
-hackip = "hackip.main:execute"
+hackip = "hackip.__main__:execute"

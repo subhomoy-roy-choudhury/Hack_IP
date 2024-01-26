@@ -16,7 +16,8 @@ venv:
 	@echo "Virtual environment created."
 
 pre-commit:
-	@pre-commit install
+	@echo "Installling pre-commit hooks"
+	@pre-commit install --install-hooks
 
 deps:
 	@echo "Installing dependencies..."

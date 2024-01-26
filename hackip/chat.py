@@ -1,8 +1,8 @@
 import logging
 import os
 
-from constants import GENERATED_REPORT_FOLDER_NAME
-from helpers import read_json
+from .constants import GENERATED_REPORT_FOLDER_NAME
+from .helpers import read_json
 from openai import OpenAI
 from rich import print as rprint
 
