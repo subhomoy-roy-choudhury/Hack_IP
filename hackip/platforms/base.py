@@ -26,6 +26,7 @@ from .utilities.enum import InformationParameter
 from rich.console import Console
 from rich.panel import Panel
 from rich.status import Status
+from rich import print as rprint
 
 logger = logging.getLogger(__name__)
 console = Console()
@@ -339,13 +340,16 @@ class BaseOperatingSystem(object):
 
     def _generate_report(self, data):
         try:
-            write_json(
-                os.path.join(GENERATED_REPORT_FOLDER_NAME, "overall-report.json"), data
+            report_filepath = os.path.join(
+                os.getcwd(), GENERATED_REPORT_FOLDER_NAME, "overall-report.json"
             )
+            write_json(report_filepath, data)
             console.print(
                 "\n[+] Successfully generated system report \n",
                 style="bold bright_blue",
             )
+            rprint("[purple]Report File Path :[/purple]", end=" ")
+            rprint(f"[blue]{report_filepath}[/blue] \n")
         except Exception as e:
             raise ValueError("Error Generating Report")
 
