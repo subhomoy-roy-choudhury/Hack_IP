@@ -24,11 +24,10 @@
 <p align="center">
     <img alt="Test Cases" src="https://github.com/subhomoy-roy-choudhury/Hack_IP/actions/workflows/master-lint-and-test.yml/badge.svg" />
     <img alt="Downloads" src="https://img.shields.io/github/downloads/subhomoy-roy-choudhury/Hack_IP/total" />
-    <img alt="Contributors" src="https://img.shields.io/github/contributors/subhomoy-roy-choudhury/Hack_IP?color=dark-green" />
+    <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/subhomoy-roy-choudhury/Hack_IP?color=dark-green" />
     <img alt="Github Issues" src="https://img.shields.io/github/issues/subhomoy-roy-choudhury/Hack_IP" />
-    <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/subhomoy-roy-choudhury/Hack_IP" />
     <img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/subhomoy-roy-choudhury/Hack_IP" />
-    <img alt="" src="https://img.shields.io/github/repo-size/subhomoy-roy-choudhury/Hack_IP" />
+    <img alt="Repo Size" src="https://img.shields.io/github/repo-size/subhomoy-roy-choudhury/Hack_IP" />
     <img alt="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/subhomoy-roy-choudhury/Hack_IP" />
     <img alt="Github License" src="https://img.shields.io/github/license/subhomoy-roy-choudhury/Hack_IP" />
     <img alt="Test Cases" src="https://github.com/subhomoy-roy-choudhury/Hack_IP/actions/workflows/python-publish.yml/badge.svg" />
