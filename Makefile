@@ -25,3 +25,7 @@ deps:
 	@$(ACTIVATE_VENV) && pip install --upgrade poetry
 	@$(ACTIVATE_VENV) && poetry install --no-cache
 	@echo "Dependencies installed."
+
+test:
+	@echo "Running Test Cases..."
+	@$(ACTIVATE_VENV) && pytest -v
