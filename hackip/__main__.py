@@ -106,18 +106,42 @@ class HackIP:
 
 def execute():
     try:
-        parser = argparse.ArgumentParser(description="Sample argparse program")
-        parser.add_argument(
-            "-d", "--details", action="store_true", help="Advanced Detailed Scanning"
+        parser = argparse.ArgumentParser(
+            description="This is a tool to get IP and system information of a specific device"
         )
-        parser.add_argument("--verbose", action="store_true", help="Verbose mode")
+
+        # Add subparsers for the 'run' and 'chat' commands
+        subparsers = parser.add_subparsers(dest="command", help="Sub-command help")
+
+        # Create the parser for the "run" command
+        parser_run = subparsers.add_parser("run", help="Start Execution")
+        parser_run.add_argument(
+            "-d",
+            "--details",
+            action="store_true",
+            help="Advanced Nmap Scanning of open ports",
+        )
+
+        # Create the parser for the "chat" command
+        parser_chat = subparsers.add_parser(
+            "chat", help="Start Chatting with your details report"
+        )
+        parser_chat.add_argument("--verbose", action="store_true", help="Verbose mode")
+
         args = parser.parse_args()
 
-        # Load configuration
-        configuration = load_configuration()
+        # Now you can check if 'run' or 'chat' was called, and if '--details' was used
+        if args.command == "run":
+            rprint("[green]Start Execution...[/green]\n")
+            # Load configuration
+            configuration = load_configuration()
 
-        # Start HackIP
-        HackIP(configuration, args.details).start()
+            # Start HackIP
+            HackIP(configuration, args.details).start()
+
+        elif args.command == "chat":
+            rprint("[green]Chatting with details...[/green]\n")
+            # Add OpenAI LLM Conversation
 
     except Exception as e:
         print(f"Error during execution: {e}")

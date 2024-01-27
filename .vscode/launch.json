@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/run.local.py",
-            // "args": ["--details"],
+            "args": ["run"],
             "console": "integratedTerminal",
             "justMyCode": true
         },
