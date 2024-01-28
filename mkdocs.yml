@@ -1,0 +1,14 @@
+site_name: HackIP
+site_url: https://github.com/subhomoy-roy-choudhury/Hack_IP
+repo_url: https://github.com/subhomoy-roy-choudhury/Hack_IP
+nav:
+  - Getting Started: index.md
+  - License: license.md
+theme:
+  name: material
+  logo: assets/hacker.png
+  icon:
+    repo: fontawesome/brands/git-alt
+extra:
+  plugins:
+    - optimize
