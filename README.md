@@ -94,8 +94,30 @@ You can run the HackIp using the following command:
 ```sh
 hackip run [OPTIONS]
 ```
-Each option is detailed below:
-- `--details` : Advanced Detailed Scanning using Nmap
+Each option for the hackip run command is detailed below:
+
+- `--details`: Enables advanced detailed scanning using Nmap. This option is suitable for comprehensive network scanning.
+- `--chat`: Activates a chat interface for interactive communication with the tool.
+- `--no_fetch`: If set, the tool will chat without fetching system information. Ideal for chat-only interactions.
+- `--cuttly_api_key`: Specify your Cuttly URL shortener API key with this option, necessary for URL shortening features.
+- `--openai_key`: Your OpenAI API key. This is required for functionalities that utilize OpenAI services, such as chat response generation.
+
+### Example Usage
+
+Run HackIp with Advanced Scanning and Chat:
+
+```sh
+hackip run --details --chat --cuttly_api_key YOUR_CUTTLY_API_KEY --openai_key YOUR_OPENAI_API_KEY
+```
+
+Run HackIp with Chat Feature Only:
+
+```sh
+hackip run --chat --openai_key YOUR_OPENAI_API_KEY
+```
+
+*Note: Replace YOUR_CUTTLY_API_KEY and YOUR_OPENAI_API_KEY with your actual API keys.*
+
 
 ## Star History
 

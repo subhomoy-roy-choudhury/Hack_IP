@@ -9,7 +9,13 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/run.local.py",
-            "args": ["run"],
+            "args": [
+                "run",
+                "--chat",
+                "--no_fetch",
+                "--openai_key",
+                "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"
+            ],
             "console": "integratedTerminal",
             "justMyCode": true
         },

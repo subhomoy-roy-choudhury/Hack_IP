@@ -1,3 +1,4 @@
+import re
 import argparse
 import logging
 import platform
@@ -6,7 +7,6 @@ import sys
 from art import text2art
 from .chat import generate_response
 from .constants import (
-    CONFIGURATION_SECTION_KEYS,
     CREDENTIALS_KEYS,
     GENERATED_REPORT_FOLDER_NAME,
 )
@@ -14,7 +14,6 @@ from .helpers import create_folder
 from .logger_config import setup_logging
 from .platforms.os import LinuxOS, MacOS, WindowsOS
 from rich import print as rprint
-from .utils import load_configuration
 
 # Setup logging
 setup_logging()
@@ -47,33 +46,23 @@ class HackIP:
             rprint("[red]Unsupported Operating System[/red]")
             sys.exit(1)
 
-        try:
-            cuttly_api_key = self.configuration.get(
-                CONFIGURATION_SECTION_KEYS.CREDENTIALS.value,
-                CREDENTIALS_KEYS.CUTTLY_API_KEY.value[0],
-            )
-        except Exception as e:
-            cuttly_api_key = None
+        cuttly_api_key = self.configuration.get(
+            CREDENTIALS_KEYS.CUTTLY_API_KEY.value[0], None
+        )
 
-        try:
-            if cuttly_api_key is None:
-                logger.warning("Cuttly API key not found in configuration.")
+        if cuttly_api_key is None:
+            logger.warning("Cuttly API key not found in configuration.")
 
-            return os_util_class(
-                cuttly_api_key=cuttly_api_key, advanced_scanning=self.advanced_scanning
-            )
-
-        except Exception as e:
-            rprint(f"[red]Error while initializing OS utility: {e}[/red]")
-            sys.exit(1)
+        return os_util_class(
+            cuttly_api_key=cuttly_api_key, advanced_scanning=self.advanced_scanning
+        )
 
     def chat(self):
-        try:
-            openai_key = self.configuration.get(
-                CONFIGURATION_SECTION_KEYS.CREDENTIALS.value,
-                CREDENTIALS_KEYS.OPENAI_API_KEY.value[0],
-            )
-        except Exception as _:
+        openai_key = self.configuration.get(
+            CREDENTIALS_KEYS.OPENAI_API_KEY.value[0], None
+        )
+
+        if openai_key is None:
             rprint("[red]Error finding OpenAI API key[/red]")
             return
 
@@ -93,15 +82,26 @@ class HackIP:
             except Exception as e:
                 rprint(f"[red]Error: {e}[/red]")
 
-    def start(self):
-        # self.introduction()
-        create_folder(GENERATED_REPORT_FOLDER_NAME)
+    def start(self, is_fetch=True, is_chat=True):
+        self.introduction()
 
-        os_object = self.get_os_utility()
-        if os_object:
+        if is_fetch:
+            create_folder(GENERATED_REPORT_FOLDER_NAME)
+
+            os_object = self.get_os_utility()
             os_object.stdout()
 
-        self.chat()
+        if is_chat:
+            self.chat()
+
+
+class OpenAIKeyAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        # Regex for OpenAI key. This is just an example; adjust it as needed.
+        pattern = r"^sk-\w+$"
+        if not re.match(pattern, values):
+            parser.error(f"{values} is not a valid OpenAI API key")
+        setattr(namespace, self.dest, values)
 
 
 def execute():
@@ -110,10 +110,8 @@ def execute():
             description="This is a tool to get IP and system information of a specific device"
         )
 
-        # Add subparsers for the 'run' and 'chat' commands
         subparsers = parser.add_subparsers(dest="command", help="Sub-command help")
 
-        # Create the parser for the "run" command
         parser_run = subparsers.add_parser("run", help="Start Execution")
         parser_run.add_argument(
             "-d",
@@ -121,27 +119,34 @@ def execute():
             action="store_true",
             help="Advanced Nmap Scanning of open ports",
         )
-
-        # Create the parser for the "chat" command
-        parser_chat = subparsers.add_parser(
-            "chat", help="Start Chatting with your details report"
+        parser_run.add_argument(
+            "--chat", action="store_true", help="Chat with the Information"
         )
-        parser_chat.add_argument("--verbose", action="store_true", help="Verbose mode")
+        parser_run.add_argument(
+            "--no_fetch",
+            action="store_false",
+            help="Chat without fetching system Information",
+        )
+        parser_run.add_argument(
+            "--cuttly_api_key", type=str, help="Cuttly URL shortener API key"
+        )
+        parser_run.add_argument(
+            "--openai_key", type=str, help="OpenAI API Key", action=OpenAIKeyAction
+        )
 
         args = parser.parse_args()
 
-        # Now you can check if 'run' or 'chat' was called, and if '--details' was used
         if args.command == "run":
             rprint("[green]Start Execution...[/green]\n")
-            # Load configuration
-            configuration = load_configuration()
 
-            # Start HackIP
-            HackIP(configuration, args.details).start()
+            configuration = {
+                CREDENTIALS_KEYS.OPENAI_API_KEY.value[0]: args.openai_key,
+                CREDENTIALS_KEYS.CUTTLY_API_KEY.value[0]: args.cuttly_api_key,
+            }
 
-        elif args.command == "chat":
-            rprint("[green]Chatting with details...[/green]\n")
-            # Add OpenAI LLM Conversation
+            HackIP(configuration, args.details).start(
+                is_fetch=args.no_fetch, is_chat=args.chat
+            )
 
     except Exception as e:
         print(f"Error during execution: {e}")
