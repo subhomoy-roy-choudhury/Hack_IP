@@ -92,7 +92,7 @@ hackip
 You can run the HackIp using the following command:
 
 ```sh
-hackip run [OPTIONS]
+hackip run [--details]
 ```
 Each option for the hackip run command is detailed below:
 
